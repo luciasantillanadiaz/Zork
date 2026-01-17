@@ -1,19 +1,43 @@
-// Zork.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
-
 #include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iterator>
+#include <algorithm>
+#include <cctype>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+using namespace std;
+
+vector<string> parseInput(string& input) {
+    transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+    stringstream inputStream(input);
+
+    return vector<string>(
+        istream_iterator<string>(inputStream),
+        istream_iterator<string>()
+    );
 }
 
-// Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
-// Depurar programa: F5 o menú Depurar > Iniciar depuración
+int main() {
+    string input;
+    vector<string> commands;
 
-// Sugerencias para primeros pasos: 1. Use la ventana del Explorador de soluciones para agregar y administrar archivos
-//   2. Use la ventana de Team Explorer para conectar con el control de código fuente
-//   3. Use la ventana de salida para ver la salida de compilación y otros mensajes
-//   4. Use la ventana Lista de errores para ver los errores
-//   5. Vaya a Proyecto > Agregar nuevo elemento para crear nuevos archivos de código, o a Proyecto > Agregar elemento existente para agregar archivos de código existentes al proyecto
-//   6. En el futuro, para volver a abrir este proyecto, vaya a Archivo > Abrir > Proyecto y seleccione el archivo .sln
+    cout << "Welcome to Zork!\n" << endl;
+
+    while (1) {
+        cout << "> ";
+
+        getline(cin, input);
+        if (input.empty()) continue;       
+
+        commands = parseInput(input);
+        if (commands.empty()) continue;
+
+        if (commands[0] == "quit") break;
+        else cout << "Command not recognized." << endl;
+    }
+
+    cout << "\nThanks for playing!\n";
+    return 0;
+}
