@@ -1,4 +1,5 @@
 #include "barrier.h"
+#include "item.h"
 
 using namespace std;
 
@@ -27,6 +28,13 @@ void Barrier::Unlock() {
 
 bool Barrier::IsLocked() const {
 	return isLocked;
+}
+
+bool Barrier::TryUnlock(Item* item) {
+	if (item != key) return false;
+
+	Unlock();
+	return true;
 }
 
 const Entity* Barrier::GetKey() const {
