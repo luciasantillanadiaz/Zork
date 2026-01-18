@@ -33,6 +33,9 @@
     <ClCompile Include="barrier.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -48,6 +51,9 @@
       <Filter>Archivos de origen</Filter>
     </ClInclude>
     <ClInclude Include="barrier.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
   </ItemGroup>
