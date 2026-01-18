@@ -1,3 +1,4 @@
+#include <iostream>
 #include "creature.h"
 #include "room.h"
 #include "exit.h"
@@ -46,16 +47,17 @@ bool Creature::Take(Item* item) {
 }
 
 bool Creature::Drop(Item* item) {
-	if (item != nullptr) {
-		if (item->GetParent() == this) {
-			item->SetParent(static_cast<Room*>(parent));
-			return true;
-		}
+	if (item == nullptr) return false;
+
+	if (item->GetParent() != this) {
+		cout << "You don't have the item " << item->GetName() << "." << endl;
+		return false;
 	}
 
-	return false;
+	item->SetParent(parent);
+	return true;
 }
 
-Room* Creature::GetRoom() {
+Room* Creature::GetRoom() const{
 	return static_cast<Room*>(parent);
 }
