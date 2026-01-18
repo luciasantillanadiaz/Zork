@@ -2,11 +2,13 @@
 
 using namespace std;
 
-Barrier::Barrier(const string& name, const string& description, Entity* key, bool isOpen, bool isLocked) :
+Barrier::Barrier(const string& name, const string& description, Entity* key, bool isLocked) :
 	Entity(name, description, nullptr),
-	key(key), isOpen(isOpen), isLocked(isLocked)
+	key(key), isLocked(isLocked)
 {
 	type = EntityType::BARRIER;	
+
+	isOpen = false;
 }
 
 Barrier::~Barrier() { }
