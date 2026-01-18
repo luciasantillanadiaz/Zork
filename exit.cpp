@@ -1,4 +1,5 @@
 #include "exit.h"
+#include "room.h"
 #include "barrier.h"
 
 using namespace std;
