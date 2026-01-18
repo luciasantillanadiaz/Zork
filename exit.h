@@ -12,7 +12,7 @@ public:
 		Room* origin, Room* destination, bool bidirectional, Barrier* barrier);
 	~Exit();
 
-	Room* GetDestination() const;
+	Room* GetDestinationFrom(Room* room) const;
 	Direction GetDirection(const Room* room) const;
 	Barrier* GetBarrier() const;
 

@@ -23,8 +23,13 @@ Exit::Exit(const string& name, const string& description, Direction direction, R
 
 Exit::~Exit() { }
 
-Room* Exit::GetDestination() const {
-	return destination;
+Room* Exit::GetDestinationFrom(Room* room) const {
+	if (room == origin) {
+		return destination;
+	}
+	else if (room == destination) {
+		return origin;
+	}
 }
 
 Direction Exit::GetDirection(const Room* room) const {
