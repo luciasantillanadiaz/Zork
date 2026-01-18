@@ -8,7 +8,18 @@ enum class EntityType {
 	PLAYER,
 	ROOM,
 	ITEM,
-	EXIT	
+	EXIT,
+	BARRIER
+};
+
+enum class Direction {
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST,
+	UP,
+	DOWN,
+	UNKNOWN
 };
 
 class Entity {
@@ -28,6 +39,8 @@ protected:
 	std::string name;
 	std::string description;
 
-	Entity* parent;	
+	Entity* parent;
+
+public:
 	std::list<Entity*> contains;
 };

@@ -10,15 +10,7 @@ Entity::Entity(const string& name, const string& description, Entity* parent) :
 	}
 }
 
-Entity::~Entity() {
-	if (parent != nullptr) {
-		parent->contains.remove(this);
-	}
-
-	for (Entity* child : contains) {
-		child->parent = nullptr;
-	}
-}
+Entity::~Entity() { }
 
 void Entity::SetParent(Entity* newParent) {
 	if (parent == newParent) return;

@@ -139,11 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="barrier.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="exit.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="creature.cpp" />
+    <ClCompile Include="room.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="barrier.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="creature.h" />
+    <ClInclude Include="exit.h" />
+    <ClInclude Include="room.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
