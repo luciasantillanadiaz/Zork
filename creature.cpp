@@ -37,6 +37,17 @@ bool Creature::Move(Direction direction) {
 	return false;
 }
 
+void Creature::Open(Barrier* barrier) {
+	if (barrier == nullptr) return;
+
+	if (!barrier->IsLocked()) {
+		barrier->Open();
+	}
+	else {
+		cout << barrier->GetName() << " is locked." << endl;
+	}
+}
+
 bool Creature::Take(Item* item) {
 	if (item != nullptr) {
 		item->SetParent(this);

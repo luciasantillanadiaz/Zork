@@ -4,6 +4,7 @@
 
 class Room;
 class Item;
+class Barrier;
 
 class Creature : public Entity {
 public:
