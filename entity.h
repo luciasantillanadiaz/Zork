@@ -34,6 +34,7 @@ public:
 	const std::string& GetName() const;
 	const std::string& GetDescription() const;
 	EntityType GetType() const;
+	void FindAllOfType(EntityType type, std::list<Entity*>& list) const;
 
 protected:
 	EntityType type;

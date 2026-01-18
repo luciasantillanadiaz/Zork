@@ -41,3 +41,10 @@ const string& Entity::GetDescription() const {
 EntityType Entity::GetType() const {
 	return type;
 }
+
+void Entity::FindAllOfType(EntityType type, std::list<Entity*>& list) const {
+	for (Entity* entity : contains)	{
+		if (entity->GetType() == type)
+			list.push_back(entity);
+	}
+}
