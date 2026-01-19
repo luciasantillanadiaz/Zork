@@ -36,6 +36,9 @@ public:
 	EntityType GetType() const;
 	void FindAllOfType(EntityType type, std::list<Entity*>& list) const;
 
+	virtual void Look() const;
+	virtual void Update();
+
 protected:
 	EntityType type;
 	std::string name;

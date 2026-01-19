@@ -1,6 +1,10 @@
+#include <iostream>
 #include "entity.h"
 
 using namespace std;
+
+const string BOLD = "\033[1m";
+const string RESET = "\033[0m";
 
 Entity::Entity(const string& name, const string& description, Entity* parent) :
 	name(name), description(description), parent(parent), type(EntityType::ENTITY)
@@ -48,3 +52,10 @@ void Entity::FindAllOfType(EntityType type, std::list<Entity*>& list) const {
 			list.push_back(entity);
 	}
 }
+
+void Entity::Look() const {
+	cout << BOLD << "\n" << name << "\n" << RESET;
+	cout << description << "\n";
+}
+
+void Entity::Update() { }
