@@ -37,22 +37,29 @@ int main() {
     commands.push_back("look");
 
     while (1) {
-        if (commands.empty()) continue;
+        if (!commands.empty()) {
 
-        if (commands[0] == "quit") break;
+            if (commands[0] == "quit") { break; }
 
-        string action = commands[0];
-        vector<string> args;
-        if (commands.size() > 1) {
-            args.assign(commands.begin() + 1, commands.end());
+            string action = commands[0];
+            vector<string> args;
+
+            if (commands.size() > 1) {
+                args.assign(commands.begin() + 1, commands.end());
+            }
+
+            cout << "\n";
+
+            commandSystem->ExecuteCommand(action, args);
+            commands.clear();
         }
 
-        commandSystem->ExecuteCommand(action, args);    
-
         cout << "> ";
-
         getline(cin, input);
-        if (input.empty()) continue;
+
+        if (input.empty() || input.find_first_not_of(" \t\n\r") == string::npos) {
+            continue;
+        }
 
         commands = parseInput(input);
     }
