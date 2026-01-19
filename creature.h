@@ -12,10 +12,10 @@ public:
 	Creature(const std::string& name, const std::string& description, Room* room);
 	~Creature();
 
-	bool Move(Direction direction);
-	bool Open(Barrier* barrier);
-	bool Take(Item* item);
-	bool Drop(Item* item);
+	virtual bool Move(Direction direction);
+	virtual bool Open(Barrier* barrier);
+	virtual bool Take(Item* item);
+	virtual bool Drop(Item* item);
 
 	Room* GetRoom() const;
 
