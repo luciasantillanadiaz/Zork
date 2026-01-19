@@ -16,25 +16,39 @@ Creature::Creature(const string& name, const string& description, Room* room) :
 Creature::~Creature() { }
 
 bool Creature::Move(Direction direction) {
-	Exit* exit = static_cast<Room*>(parent)->GetExit(direction);
+	Room* currentRoom = dynamic_cast<Room*>(parent);
+	if (currentRoom == nullptr) return false;
 
-	if (exit != nullptr) {
-		Barrier* barrier = exit->GetBarrier();
+	Exit* exit = currentRoom->GetExit(direction);
 
-		if (barrier != nullptr) {
+	if (exit == nullptr) return false;
 
-			if (barrier->IsOpen()) {
-				Room* nextRoom = exit->GetDestinationFrom(static_cast<Room*>(parent));
+	list<Entity*> barriers;
+	exit->FindAllOfType(EntityType::BARRIER, barriers);
 
-				if (nextRoom != nullptr) {
-					SetParent(nextRoom);
-					return true;
-				}
-			}
-		}		
+	if (barriers.empty()) {
+		return EnterRoom(exit);
 	}
 
-	return false;
+	Barrier* barrier = static_cast<Barrier*>(barriers.front());
+
+	if (barrier != nullptr) {
+		if (barrier->IsOpen()) {
+			return EnterRoom(exit);
+		}
+		else return false;
+	}
+
+	return EnterRoom(exit);
+}
+
+bool Creature::EnterRoom(Exit* exit) {
+	Room* nextRoom = exit->GetDestinationFrom(static_cast<Room*>(parent));
+
+	if (nextRoom == nullptr) return false;
+
+	SetParent(nextRoom);
+	return true;
 }
 
 void Creature::Open(Barrier* barrier) {

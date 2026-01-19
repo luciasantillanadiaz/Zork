@@ -1,21 +1,13 @@
 #include "exit.h"
 #include "room.h"
-#include "barrier.h"
 
 using namespace std;
 
-Exit::Exit(const string& name, const string& description, Direction direction, Room* origin, Room* destination, bool bidirectional, Barrier* barrier) :
-	Entity(name, description, static_cast<Entity*>(origin)), 
-	direction(direction), origin(origin), destination(destination), bidirectional(bidirectional), barrier(barrier)
+Exit::Exit(Direction direction, Room* origin, Room* destination, bool bidirectional) :
+	Entity("Exit", origin->GetName() + " - " + destination->GetName(), static_cast<Entity*>(origin)),
+	direction(direction), origin(origin), destination(destination), bidirectional(bidirectional)
 {
 	type = EntityType::EXIT;
-
-	if (barrier != nullptr) {
-		if (barrier->GetParent() == nullptr) {
-			barrier->SetParent(this);
-			contains.push_back(barrier);
-		}
-	}
 
 	if (bidirectional == true) {
 		destination->contains.push_back(this);
@@ -31,6 +23,8 @@ Room* Exit::GetDestinationFrom(Room* room) const {
 	else if (room == destination) {
 		return origin;
 	}
+
+	return nullptr;
 }
 
 Direction Exit::GetDirection(const Room* room) const {
@@ -41,10 +35,6 @@ Direction Exit::GetDirection(const Room* room) const {
 		return GetOppositeDirection(direction);
 	}
 	return Direction::UNKNOWN;
-}
-
-Barrier* Exit::GetBarrier() const {
-	return barrier;
 }
 
 Direction Exit::GetOppositeDirection(Direction direction) {

@@ -5,6 +5,7 @@
 class Room;
 class Item;
 class Barrier;
+class Exit;
 
 class Creature : public Entity {
 public:
@@ -17,4 +18,7 @@ public:
 	bool Drop(Item* item);
 
 	Room* GetRoom() const;
+
+private:
+	bool EnterRoom(Exit* exit);
 };

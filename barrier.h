@@ -6,7 +6,7 @@ class Item;
 
 class Barrier : public Entity {
 public:
-	Barrier(const std::string& name, const std::string& description, Entity* key, bool isLocked);
+	Barrier(const std::string& name, const std::string& description, Entity* key, bool isLocked, Entity* parent);
 	~Barrier();
 
 	void Open();

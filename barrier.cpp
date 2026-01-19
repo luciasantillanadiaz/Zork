@@ -3,8 +3,8 @@
 
 using namespace std;
 
-Barrier::Barrier(const string& name, const string& description, Entity* key, bool isLocked) :
-	Entity(name, description, nullptr),
+Barrier::Barrier(const string& name, const string& description, Entity* key, bool isLocked, Entity* parent) :
+	Entity(name, description, parent),
 	key(key), isLocked(isLocked)
 {
 	type = EntityType::BARRIER;	
