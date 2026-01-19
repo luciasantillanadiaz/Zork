@@ -11,7 +11,7 @@ public:
 	World();
 	~World();
 
-	Command* GetCommmandSystem() const;
+	Command* GetCommandSystem() const;
 
 private:
 	std::list<Entity*> entities;

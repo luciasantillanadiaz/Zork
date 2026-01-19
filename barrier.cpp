@@ -31,7 +31,7 @@ bool Barrier::IsLocked() const {
 }
 
 bool Barrier::TryUnlock(Item* item) {
-	if (item != key) return false;
+	if (item != key) { return false; }
 
 	Unlock();
 	return true;

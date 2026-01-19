@@ -15,6 +15,7 @@ Exit* Room::GetExit(Direction direction) const {
 	for (Entity* e : contains) {
 		if (e->GetType() == EntityType::EXIT) {
 			Exit* exit = static_cast<Exit*>(e);
+
 			if (exit->GetDirection(this) == direction) {
 				return exit;
 			}

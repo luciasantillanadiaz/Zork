@@ -15,7 +15,7 @@ Player::Player(const string& name, const string& description, Room* room) :
 Player::~Player() { }
 
 void Player::Unlock(Barrier* barrier, Item* key) {
-	if (barrier == nullptr || key == nullptr) return;
+	if (barrier == nullptr || key == nullptr) { return; }
 
 	if (key->GetParent() != this) {
 		cout << "You don't have the item " << key->GetName() << ".\n";
@@ -61,7 +61,7 @@ bool Player::Open(Barrier* barrier) {
 		list<Entity*> items;
 		barrier->FindAllOfType(EntityType::ITEM, items);
 
-		if (items.empty()) return success;
+		if (items.empty()) { return success; }
 
 		cout << "You found: ";
 

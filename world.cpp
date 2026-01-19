@@ -126,14 +126,15 @@ World::World() {
 }
 
 World::~World() {
-	for (Entity* entity : entities)
+	for (Entity* entity : entities) {
 		delete entity;
+	}
 
 	entities.clear();
 
 	delete commandSystem;
 }
 
-Command* World::GetCommmandSystem() const {
+Command* World::GetCommandSystem() const {
 	return commandSystem;
 }

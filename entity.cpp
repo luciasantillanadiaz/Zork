@@ -48,13 +48,14 @@ EntityType Entity::GetType() const {
 
 void Entity::FindAllOfType(EntityType type, std::list<Entity*>& list) const {
 	for (Entity* entity : contains)	{
-		if (entity->GetType() == type)
+		if (entity->GetType() == type) {
 			list.push_back(entity);
+		}
 	}
 }
 
 void Entity::Look() const {
-	cout << BOLD << "\n" << name << "\n" << RESET;
+	cout << BOLD << name << "\n" << RESET;
 	cout << description << "\n";
 }
 

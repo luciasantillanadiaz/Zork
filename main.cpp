@@ -14,7 +14,7 @@ const string BOLD = "\033[1m";
 const string RESET = "\033[0m";
 const string RED = "\033[31m";
 
-vector<string> parseInput(string& input) {
+vector<string> ParseInput(string& input) {
     transform(input.begin(), input.end(), input.begin(), ::tolower);
 
     stringstream inputStream(input);
@@ -30,7 +30,7 @@ int main() {
     vector<string> commands;
 
     World world;
-    Command* commandSystem = world.GetCommmandSystem();
+    Command* commandSystem = world.GetCommandSystem();
 
     cout << RED << BOLD << " --- WELCOME TO MY ZORK! ---\n" << RESET;
 
@@ -61,7 +61,7 @@ int main() {
             continue;
         }
 
-        commands = parseInput(input);
+        commands = ParseInput(input);
     }
 
     cout << "\nThanks for playing!\n";
