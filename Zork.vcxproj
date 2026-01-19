@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="barrier.cpp" />
+    <ClCompile Include="command.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="exit.cpp" />
     <ClCompile Include="item.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="barrier.h" />
+    <ClInclude Include="command.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="creature.h" />
     <ClInclude Include="exit.h" />
