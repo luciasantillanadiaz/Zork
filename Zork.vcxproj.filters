@@ -39,6 +39,9 @@
     <ClCompile Include="player.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="world.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
     <ClCompile Include="command.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -63,6 +66,9 @@
       <Filter>Archivos de origen</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="world.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
     <ClInclude Include="command.h">
