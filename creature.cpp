@@ -46,7 +46,7 @@ bool Creature::EnterRoom(Exit* exit) {
 }
 
 bool Creature::Open(Barrier* barrier) {
-	if (barrier == nullptr) { return; }
+	if (barrier == nullptr) { return true; }
 
 	if (!barrier->IsLocked()) {
 		barrier->Open();
