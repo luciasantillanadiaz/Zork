@@ -13,7 +13,7 @@ public:
 	~Creature();
 
 	bool Move(Direction direction);
-	void Open(Barrier* barrier);
+	bool Open(Barrier* barrier);
 	bool Take(Item* item);
 	bool Drop(Item* item);
 
