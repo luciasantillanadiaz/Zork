@@ -13,6 +13,8 @@ public:
 
 	Command* GetCommandSystem() const;
 
+	void Update();
+
 private:
 	std::list<Entity*> entities;
 	Player* player;

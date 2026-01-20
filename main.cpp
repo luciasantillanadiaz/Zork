@@ -5,6 +5,8 @@
 #include <iterator>
 #include <algorithm>
 #include <cctype>
+#include <conio.h>
+#include <windows.h>
 #include "world.h"
 #include "command.h"
 
@@ -36,14 +38,35 @@ int main() {
 
     commands.push_back("look");
 
-    while (1) {
+    while (true) {
+        if (_kbhit()) {
+            char key = _getch();
+
+            if (key == '\b') {
+                if (!input.empty()) {
+                    input.pop_back();
+                    cout << "\b \b";
+                }
+            }
+            else if (key != '\r') {
+                input += key;
+                cout << key;
+            }
+            else { 
+                cout << "\n";
+                if (!input.empty()) {
+                    commands = ParseInput(input);
+                    input.clear();
+                }
+            }
+        }
+
         if (!commands.empty()) {
 
-            if (commands[0] == "quit") { break; }
+            if (commands[0] == "quit") break;
 
             string action = commands[0];
             vector<string> args;
-
             if (commands.size() > 1) {
                 args.assign(commands.begin() + 1, commands.end());
             }
@@ -51,17 +74,14 @@ int main() {
             cout << "\n";
 
             commandSystem->ExecuteCommand(action, args);
+
             commands.clear();
+            cout << "> ";
         }
 
-        cout << "> ";
-        getline(cin, input);
+        world.Update();
 
-        if (input.empty() || input.find_first_not_of(" \t\n\r") == string::npos) {
-            continue;
-        }
-
-        commands = ParseInput(input);
+        Sleep(10);
     }
 
     cout << "\nThanks for playing!\n";

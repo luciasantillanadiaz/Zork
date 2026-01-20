@@ -146,3 +146,9 @@ World::~World() {
 Command* World::GetCommandSystem() const {
 	return commandSystem;
 }
+
+void World::Update() {
+	for (Entity* entity : entities) {
+		entity->Update();
+	}
+}
