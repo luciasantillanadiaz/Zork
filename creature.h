@@ -16,9 +16,16 @@ public:
 	virtual bool Open(Barrier* barrier);
 	virtual bool Take(Item* item);
 	virtual bool Drop(Item* item);
+	virtual bool Attack(Creature* target, Item* item);
+	void ReceiveDamage(int damage);
+	void Die();
 
+	bool IsAlive() const;
+	int GetHealth() const;
 	Room* GetRoom() const;
 
 private:
 	bool EnterRoom(Exit* exit);
+	int health;
+	int strength;
 };

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "creature.h"
 #include "room.h"
 #include "exit.h"
@@ -46,7 +47,7 @@ bool Creature::EnterRoom(Exit* exit) {
 }
 
 bool Creature::Open(Barrier* barrier) {
-	if (barrier == nullptr) { return true; }
+	if (barrier == nullptr) { return false; }
 
 	if (!barrier->IsLocked()) {
 		barrier->Open();
@@ -74,6 +75,32 @@ bool Creature::Drop(Item* item) {
 	return true;
 }
 
+bool Creature::Attack(Creature* target, Item* weapon) { 
+	if (target == nullptr) { return false; }
+
+	if (target->GetRoom() != parent) { return false; }
+
+	return true;
+}
+
+void Creature::ReceiveDamage(int damage) {
+	if (IsAlive() == false) {
+		Die();
+	}		
+}
+
+void Creature::Die() {
+	cout << name << "has died.\n";
+}
+
+bool Creature::IsAlive() const {
+	return health > 0;
+}
+
 Room* Creature::GetRoom() const {
 	return static_cast<Room*>(parent);
+}
+
+int Creature::GetHealth() const {
+	return health;
 }

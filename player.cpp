@@ -105,6 +105,20 @@ bool Player::Drop(Item* item) {
 	return success;
 }
 
+bool Player::Attack(Creature* target, Item* weapon) {
+	if (weapon != nullptr) {
+		if (weapon->GetParent() != this) {
+			cout << "You don't have the item " << weapon->GetName() << ".\n";
+			return false;
+		}
+		cout << "You attacked with " << weapon->GetName() << ".\n";
+	}
+		
+	cout << "You attacked bare-handed.\n";
+
+	return true;
+}
+
 void Player::GetInventory() const {
 	list<Entity*> inventoryList;
 	FindAllOfType(EntityType::ITEM, inventoryList);

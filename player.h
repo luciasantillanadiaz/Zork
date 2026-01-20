@@ -12,6 +12,7 @@ public:
 	bool Open(Barrier* barrier) override;
 	bool Take(Item* item) override;
 	bool Drop(Item* item) override;
+	bool Attack(Creature* target, Item* weapon) override;
 
 	void GetInventory() const;
 };
