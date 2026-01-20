@@ -8,6 +8,7 @@
 #include "player.h"
 #include "barrier.h"
 #include "command.h"
+#include "enemy.h"
 
 using namespace std;
 
@@ -112,14 +113,21 @@ World::World() {
 	);
 	entities.push_back(cross);
 
-	// Player
+	// Creatures
 	player = new Player(
 		"Player",
 		"A disoriented person who ended up in a strange castle.",
 		greatHall
 	);
 
+	Enemy* vampire = new Enemy(
+		"Vampire",
+		"An old man.",
+		mainChambers
+	);
+
 	entities.push_back(player);
+	entities.push_back(vampire);
 
 	commandSystem = new Command();
 	commandSystem->RegisterCommands(player);

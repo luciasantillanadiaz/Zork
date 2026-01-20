@@ -10,7 +10,8 @@ enum class EntityType {
 	ITEM,
 	EXIT,
 	BARRIER,
-	CREATURE
+	CREATURE,
+	ENEMY
 };
 
 enum class Direction {

@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="barrier.cpp" />
     <ClCompile Include="command.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="exit.cpp" />
     <ClCompile Include="item.cpp" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="barrier.h" />
     <ClInclude Include="command.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="creature.h" />
     <ClInclude Include="exit.h" />
