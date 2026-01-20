@@ -53,6 +53,16 @@ bool Player::Move(Direction direction) {
 }
 
 bool Player::Open(Barrier* barrier) {
+	if (barrier == nullptr) {
+		cout << "There is nothing to open.\n";
+		return false;
+	}
+
+	if (barrier->IsOpen()) {
+		cout << barrier->GetName() << " it's already open.\n";
+		return false;
+	}
+
 	bool success = Creature::Open(barrier);
 
 	if (success) {
