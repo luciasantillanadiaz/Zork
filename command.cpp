@@ -2,6 +2,9 @@
 #include "command.h"
 #include "player.h"
 #include "room.h"
+#include "enemy.h"
+#include "item.h"
+#include "barrier.h"
 #include "globals.h"
 
 using namespace std;
@@ -71,6 +74,62 @@ void Command::RegisterCommands(Player* player) {
 
     auto up = [player](const vector<string>& args) { player->Move(Direction::UP); };
     commands["up"] = up; commands["u"] = up;
+
+    // --- TAKE ---
+    auto take = [player](const vector<string>& args) {
+        switch (args.size()) {
+        case 1: {
+            Entity* entity = player->GetRoom()->Find(args[0]);
+            if (entity == nullptr) {
+                PushNotification("You can't take that.");
+                return;
+            }
+            if (entity->GetType() != EntityType::ITEM) {
+                PushNotification(entity->GetName() + " is not an item.");
+                return;
+            }
+            player->Take(static_cast<Item*>(entity));
+            break;
+        }
+        default:
+            PushNotification("Command not recognized.");
+            break;
+        }
+    };
+    commands["take"] = take;
+
+    // --- DROP ---
+    auto drop = [player](const vector<string>& args) {
+        switch (args.size()) {
+        case 1: {
+            Entity* entity = player->Find(args[0]);
+            if (entity == nullptr) {
+                PushNotification("You don't possess this item.");
+                return;
+            }
+            if (entity->GetType() != EntityType::ITEM) {
+                PushNotification(entity->GetName() + " is not an item.");
+                return;
+            }
+            player->Drop(static_cast<Item*>(entity));
+            break;
+        }
+        default:
+            PushNotification("Command not recognized.");
+        }
+    };
+    commands["drop"] = drop;
+
+    // --- INVENTORY ---
+    auto inventory = [player](const vector<string>& args) {
+        if (!args.empty()) {
+            PushNotification("Command not recognized.");
+            return;
+        }
+        player->GetInventory();
+    };
+    commands["inventory"] = inventory;
+    commands["i"] = inventory;
 }
 
 void Command::ExecuteCommand(const string& command, const vector<string>& args) {
