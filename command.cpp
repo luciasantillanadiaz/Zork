@@ -64,22 +64,40 @@ void Command::RegisterCommands(Player* player) {
     commands["move"] = move;
 
     // --- DIRECTIONS ---
-    auto moveNorth = [player](const vector<string>& args) { player->Move(Direction::NORTH); };
+    auto moveNorth = [player](const vector<string>& args) { 
+        if (args.empty()) { player->Move(Direction::NORTH); }
+        else { PushNotification(NOT_REC); }
+    };
     commands["north"] = moveNorth; commands["n"] = moveNorth;
 
-    auto moveSouth = [player](const vector<string>& args) { player->Move(Direction::SOUTH); };
+    auto moveSouth = [player](const vector<string>& args) { 
+        if (args.empty()) { player->Move(Direction::SOUTH); }
+        else { PushNotification(NOT_REC); }
+    };
     commands["south"] = moveSouth; commands["s"] = moveSouth;
 
-    auto moveEast = [player](const vector<string>& args) { player->Move(Direction::EAST); };
+    auto moveEast = [player](const vector<string>& args) { 
+        if (args.empty()) { player->Move(Direction::EAST); } 
+        else { PushNotification(NOT_REC); }
+    };
     commands["east"] = moveEast; commands["e"] = moveEast;
 
-    auto moveWest = [player](const vector<string>& args) { player->Move(Direction::WEST); };
+    auto moveWest = [player](const vector<string>& args) { 
+        if (args.empty()) { player->Move(Direction::WEST); }
+        else { PushNotification(NOT_REC); }
+    };
     commands["west"] = moveWest; commands["w"] = moveWest;
 
-    auto down = [player](const vector<string>& args) { player->Move(Direction::DOWN); };
+    auto down = [player](const vector<string>& args) { 
+        if (args.empty()) { player->Move(Direction::DOWN); }
+        else { PushNotification(NOT_REC); }
+    };
     commands["down"] = down; commands["d"] = down;
 
-    auto up = [player](const vector<string>& args) { player->Move(Direction::UP); };
+    auto up = [player](const vector<string>& args) { 
+        if (args.empty()) { player->Move(Direction::UP); }
+        else { PushNotification(NOT_REC); }
+    };
     commands["up"] = up; commands["u"] = up;
 
     // --- TAKE ---
