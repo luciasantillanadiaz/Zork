@@ -130,6 +130,66 @@ void Command::RegisterCommands(Player* player) {
     };
     commands["inventory"] = inventory;
     commands["i"] = inventory;
+
+    // --- OPEN ---
+    auto open = [player](const vector<string>& args) {
+        if (args.size() != 1) {
+            PushNotification("Command not recognized");
+            return;
+        }
+
+        Entity* entity = player->GetRoom()->Find(args[0]);
+        if (entity == nullptr) {
+            PushNotification("You can't open that");
+            return;
+        }
+
+        if (entity->GetType() != EntityType::BARRIER) {
+            PushNotification("You can't open that");
+            return;
+        }
+
+        player->Open(static_cast<Barrier*>(entity));
+    };
+    commands["open"] = open;
+
+    // --- UNLOCK ---
+    auto unlock = [player](const vector<string>& args) {
+        if (args.size() != 3) {
+            PushNotification("Command not recognized.");
+            return;
+        }
+
+        if (args[1] != "with") {
+            PushNotification("Command not recognized.");
+            return;
+        }
+
+        Entity* entity = player->GetRoom()->Find(args[0]);
+        if (entity == nullptr) {
+            PushNotification("You can't unlock that.");
+            return;
+        }
+
+        if (entity->GetType() != EntityType::BARRIER) {
+            PushNotification("You can't unlock that");
+            return;
+        }
+
+        Entity* entityItem = player->Find(args[2]);
+        if (entityItem == nullptr) {
+            PushNotification("You don't possess this item.");
+            return;
+        }
+
+        if (entityItem->GetType() != EntityType::ITEM) {
+            PushNotification("You can't use that.");
+            return;
+        }
+
+        player->Unlock(static_cast<Barrier*>(entity), static_cast<Item*>(entityItem));
+    };
+    commands["unlock"] = unlock;
 }
 
 void Command::ExecuteCommand(const string& command, const vector<string>& args) {
