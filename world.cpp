@@ -17,7 +17,7 @@ World::World() {
 	// --- ROOMS ---
 	Room* exterior = new Room(
 		"The Exterior",
-		"It felt like ages since the fresh smell filled your lungs. Now finally free, it's time to go home."
+		"It felt like an eternity since fresh air had filled your lungs. Stepping out of the darkness and finally free, you knew it was time to go home."
 	);
 	endRoom = exterior;
 	Room* greatHall = new Room(
@@ -62,15 +62,15 @@ World::World() {
 		});
 	Room* mainChambers = new Room(
 		"Main Chambers",
-		"Main Chambers"
+		"A suffocating darkness filled the room. In the center, a single coffin lay still."
 	);
 	Room* tower = new Room(
 		"Tower",
-		"Tower"
+		"A thick blanket of dust coated the room. It was clear that no living soul had entered in decades."
 	);
 	Room* aisle = new Room(
 		"Aisle",
-		"Aisle"
+		"The passage served as a silent gallery, crowded with striking portraits that seemed to watch every step."
 	);
 
 	entities.push_back(exterior);
@@ -142,7 +142,7 @@ World::World() {
 	// --- ITEMS ---
 	Item* cross = new Item(
 		"cross",
-		"A carved cross with strange symbols. When touched a wave of calmness spreads through your body, it felt warm.",
+		"A cross carved with strange symbols.",
 		tower
 	);
 	Item* sword = new Item(
@@ -174,14 +174,15 @@ World::World() {
 	);
 	Item* relic = new Item(
 		"relic",
-		"It emmits a very powerfull energy.",
+		"It emits a very powerfull energy. A warm sensation comes from it.",
 		tower
 	);
 	Item* gateKey = new Item(
 		"gate-key",
-		"Looks like a key for the entrance.",
+		"Looks like the key for the entrance.",
 		box
 	);
+
 	entities.push_back(cross);
 	entities.push_back(sword);
 	entities.push_back(garlic);
@@ -208,11 +209,12 @@ World::World() {
 	);
 	Barrier* gate = new Barrier(
 		"gate",
-		"A big gate.",
+		"A big gate, looks like the entrance.",
 		gateKey,
 		true,
 		GHtoEX
 	);
+
 	entities.push_back(towerDoor);
 	entities.push_back(trapdoor);
 
@@ -225,7 +227,7 @@ World::World() {
 
 	Enemy* vampire = new Enemy(
 		"Vampire",
-		"An old man.",
+		"A vampire who lived a very long life.",
 		mainChambers
 	);
 	vampire->SetHealth(1000000000);
