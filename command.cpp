@@ -203,7 +203,7 @@ void Command::RegisterCommands(Player* player) {
             }
 
             if (entity->GetType() != EntityType::BARRIER) {
-                PushNotification("You can't take that.");
+                PushNotification("You can't place something there.");
                 return nullptr;
             }
 

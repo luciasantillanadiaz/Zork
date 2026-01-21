@@ -45,7 +45,7 @@ bool Player::Move(Direction direction) {
 	}
 
 	Room* room = GetRoom();
-	Exit* exit = room->GetExit(direction);
+	const Exit* exit = room->GetExit(direction);
 
 	if (exit == nullptr) {
 		PushNotification("There is a wall.");
@@ -140,6 +140,11 @@ bool Player::Place(Item* item, Barrier* place) {
 		return false;
 	}
 
+	if (place->IsLocked() || !place->IsOpen()) {
+		PushNotification("You can't place something there.");
+		return false;
+	}
+
 	item->SetParent(place);
 	PushNotification("You placed " + item->GetName() + " in " + place->GetName() + ".");
 
@@ -216,13 +221,11 @@ bool Player::EnemyIsNear() {
 }
 
 Enemy* Player::EnemyInRoom() {
-	list<Entity*> enemies;
-	parent->FindAllOfType(EntityType::ENEMY, enemies);
-
-	if (!enemies.empty()) { 
-		return static_cast<Enemy*>(enemies.front()); 
+	for (Entity* entity : parent->contains) {
+		if (entity->GetType() == EntityType::ENEMY) {
+			return static_cast<Enemy*>(entity);
+		}
 	}
-
 	return nullptr;
 }
 

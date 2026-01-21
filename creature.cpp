@@ -23,7 +23,7 @@ bool Creature::Move(Direction direction) {
 	Room* currentRoom = dynamic_cast<Room*>(parent);
 	if (currentRoom == nullptr) { return false; }
 
-	Exit* exit = currentRoom->GetExit(direction);
+	const Exit* exit = currentRoom->GetExit(direction);
 
 	if (exit == nullptr) { return false; }
 
@@ -41,7 +41,7 @@ bool Creature::Move(Direction direction) {
 	return false;	
 }
 
-bool Creature::EnterRoom(Exit* exit) {
+bool Creature::EnterRoom(const Exit* exit) {
 	Room* nextRoom = exit->GetDestinationFrom(static_cast<Room*>(parent));
 
 	if (nextRoom == nullptr) { return false; }

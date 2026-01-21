@@ -32,7 +32,7 @@ public:
 	bool inCombat;
 
 private:
-	bool EnterRoom(Exit* exit);
+	bool EnterRoom(const Exit* exit);
 	int health;
 	int strength;
 };

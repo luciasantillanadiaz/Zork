@@ -92,13 +92,11 @@ void Enemy::Update() {
 }
 
 Player* Enemy::PlayerInRoom() {
-    list<Entity*> players;
-    parent->FindAllOfType(EntityType::PLAYER, players);
-
-    if (!players.empty()) { 
-        return static_cast<Player*>(players.front()); 
+    for (Entity* entity : parent->contains) {
+        if (entity->GetType() == EntityType::PLAYER) {
+            return static_cast<Player*>(entity);
+        }
     }
-
     return nullptr;
 }
 
