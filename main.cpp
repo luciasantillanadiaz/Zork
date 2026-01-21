@@ -96,11 +96,14 @@ int main() {
 
         if (!notificationQueue.empty()) {
             for (const string& msg : notificationQueue) {
-                PrintNotification(msg, input);
                 if (msg == "THE END") {
+                    cout << "\r" << string(80, ' ') << "\r";
+                    cout << "\n" << msg << "\n";
+
                     isRunning = false;
                     break;
                 }
+                PrintNotification(msg, input);
             }
             notificationQueue.clear();
         }
