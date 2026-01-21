@@ -59,4 +59,13 @@ void Entity::Look() const {
 	cout << description << "\n";
 }
 
-void Entity::Update() { }
+void Entity::Update() { return; }
+
+Entity* Entity::Find(const string& targetName) const {
+	for (Entity* entity : contains) {
+		if (entity->GetName() == targetName) {
+			return entity;
+		}
+	}
+	return nullptr;
+}
