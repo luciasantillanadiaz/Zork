@@ -12,31 +12,44 @@ using namespace std;
 Command::Command() { }
 Command::~Command() { }
 
+const string NOT_REC = "Command not recognized.";
+const string NOT_INV = "You don't have that.";
+const string NOT_HERE = "There is no such thing here.";
+const string NOT_ITEM = "You can't use that.";
+const string NOT_ENEMY = "There is no one to attack here.";
+
 void Command::RegisterCommands(Player* player) {
     // --- LOOK ---
     auto look = [player](const vector<string>& args) {
-        switch (args.size()) {
-        case 0: {
+        if (args.empty()) { // look
             player->GetRoom()->Look();
-            break;
+            return;
         }
-        case 1: {
-            Entity* entity = player->GetRoom()->Find(args[0]);
 
-            if (entity == nullptr) {
-                entity = player->Find(args[0]);
-            }
-
-            if (entity == nullptr) {
-                PushNotification("There is nothing like that here.");
-            }
-            else {
-                entity->Look();
-            }
-            break;
+        if (args.size() > 1) { // look [entity]
+            PushNotification(NOT_REC);
+            return;
         }
-        default:
-            PushNotification("Command not recognized.");
+
+        const string& targetName = args[0];
+
+        auto findVisibleEntity = [&](const string& name) -> Entity* {
+            Entity* entity = player->GetRoom()->Find(name);
+            if (entity != nullptr) return entity;
+
+            entity = player->Find(name);
+            if (entity != nullptr) return entity;
+
+            return nullptr;
+        };
+
+        Entity* entity = findVisibleEntity(targetName);
+
+        if (entity != nullptr) {
+            entity->Look();
+        }
+        else {
+            PushNotification(NOT_INV);
         }
     };
     commands["look"] = look;
@@ -44,8 +57,8 @@ void Command::RegisterCommands(Player* player) {
 
     // --- WALK ---
     auto move = [this, player](const vector<string>& args) {
-        if (args.empty()) {
-            PushNotification("Walk where?");
+        if (args.empty()) { // walk [direction]
+            PushNotification(NOT_REC);
             return;
         }
         else {
@@ -77,53 +90,74 @@ void Command::RegisterCommands(Player* player) {
 
     // --- TAKE ---
     auto take = [player](const vector<string>& args) {
-        switch (args.size()) {
-        case 1: {
-            Entity* entity = player->GetRoom()->Find(args[0]);
-            if (entity == nullptr) {
-                PushNotification("You can't take that.");
-                return;
-            }
-            if (entity->GetType() != EntityType::ITEM) {
-                PushNotification(entity->GetName() + " is not an item.");
-                return;
-            }
-            player->Take(static_cast<Item*>(entity));
-            break;
+        if (args.size() != 1) { // take [item]
+            PushNotification(NOT_REC);
+            return;
         }
-        default:
-            PushNotification("Command not recognized.");
-            break;
+
+        const string& itemName = args[0];
+
+        auto getItemFromRoom = [&](const string& name) -> Item* {
+            Entity* entity = player->GetRoom()->Find(name);
+
+            if (entity == nullptr) {
+                PushNotification(NOT_HERE);
+                return nullptr;
+            }
+
+            if (entity->GetType() != EntityType::ITEM) {
+                PushNotification("You can't take that.");
+                return nullptr;
+            }
+
+            return static_cast<Item*>(entity);
+        };
+
+        Item* item = getItemFromRoom(itemName);
+
+        if (item != nullptr) {
+            player->Take(item);
         }
     };
     commands["take"] = take;
 
     // --- DROP ---
     auto drop = [player](const vector<string>& args) {
-        switch (args.size()) {
-        case 1: {
-            Entity* entity = player->Find(args[0]);
-            if (entity == nullptr) {
-                PushNotification("You don't possess this item.");
-                return;
-            }
-            if (entity->GetType() != EntityType::ITEM) {
-                PushNotification(entity->GetName() + " is not an item.");
-                return;
-            }
-            player->Drop(static_cast<Item*>(entity));
-            break;
+        if (args.size() != 1) { // drop [item]
+            PushNotification(NOT_REC);
+            return;
         }
-        default:
-            PushNotification("Command not recognized.");
+
+        const string& itemName = args[0];
+
+        auto getItemFromInventory = [&](const string& name) -> Item* {
+            Entity* entity = player->Find(name);
+
+            if (entity == nullptr) {
+                PushNotification(NOT_INV);
+                return nullptr;
+            }
+
+            if (entity->GetType() != EntityType::ITEM) {
+                PushNotification("You can't drop that.");
+                return nullptr;
+            }
+
+            return static_cast<Item*>(entity);
+        };
+
+        Item* item = getItemFromInventory(itemName);
+
+        if (item != nullptr) {
+            player->Drop(item);
         }
     };
     commands["drop"] = drop;
 
     // --- INVENTORY ---
     auto inventory = [player](const vector<string>& args) {
-        if (!args.empty()) {
-            PushNotification("Command not recognized.");
+        if (!args.empty()) { // inventory
+            PushNotification(NOT_REC);
             return;
         }
         player->GetInventory();
@@ -133,68 +167,89 @@ void Command::RegisterCommands(Player* player) {
 
     // --- OPEN ---
     auto open = [player](const vector<string>& args) {
-        if (args.size() != 1) {
-            PushNotification("Command not recognized");
+        if (args.size() != 1) { // open [barrier]
+            PushNotification(NOT_REC);
             return;
         }
 
-        Entity* entity = player->GetRoom()->Find(args[0]);
-        if (entity == nullptr) {
-            PushNotification("You can't open that");
-            return;
-        }
+        const string& targetName = args[0];
 
-        if (entity->GetType() != EntityType::BARRIER) {
-            PushNotification("You can't open that");
-            return;
-        }
+        auto getOpenableBarrier = [&](const string& name) -> Barrier* {
+            Entity* entity = player->GetRoom()->Find(name);
 
-        player->Open(static_cast<Barrier*>(entity));
+            if (entity == nullptr) {
+                PushNotification(NOT_HERE);
+                return nullptr;
+            }
+
+            if (entity->GetType() != EntityType::BARRIER) {
+                PushNotification("You can't open that.");
+                return nullptr;
+            }
+
+            return static_cast<Barrier*>(entity);
+        };
+
+        Barrier* barrier = getOpenableBarrier(targetName);
+
+        if (barrier != nullptr) {
+            player->Open(barrier);
+        }
     };
     commands["open"] = open;
 
     // --- UNLOCK ---
     auto unlock = [player](const vector<string>& args) {
-        if (args.size() != 3) {
-            PushNotification("Command not recognized.");
+        if (args.size() != 3 || args[1] != "with") { // unlock [barrier] with [key]
+            PushNotification(NOT_REC);
             return;
         }
 
-        if (args[1] != "with") {
-            PushNotification("Command not recognized.");
-            return;
-        }
+        const string& targetName = args[0];
+        const string& keyName = args[2];
 
-        Entity* entity = player->GetRoom()->Find(args[0]);
-        if (entity == nullptr) {
-            PushNotification("You can't unlock that.");
-            return;
-        }
+        auto getBarrier = [&](const string& name) -> Barrier* {
+            Entity* entity = player->GetRoom()->Find(name);
 
-        if (entity->GetType() != EntityType::BARRIER) {
-            PushNotification("You can't unlock that");
-            return;
-        }
+            if (entity == nullptr) {
+                PushNotification(NOT_HERE);
+                return nullptr;
+            }
+            if (entity->GetType() != EntityType::BARRIER) {
+                PushNotification("You can't unlock that.");
+                return nullptr;
+            }
+            return static_cast<Barrier*>(entity);
+        };
 
-        Entity* entityItem = player->Find(args[2]);
-        if (entityItem == nullptr) {
-            PushNotification("You don't possess this item.");
-            return;
-        }
+        auto getKey = [&](const string& name) -> Item* {
+            Entity* entity = player->Find(name);
 
-        if (entityItem->GetType() != EntityType::ITEM) {
-            PushNotification("You can't use that.");
-            return;
-        }
+            if (entity == nullptr) {
+                PushNotification(NOT_INV);
+                return nullptr;
+            }
+            if (entity->GetType() != EntityType::ITEM) {
+                PushNotification(NOT_ITEM);
+                return nullptr;
+            }
+            return static_cast<Item*>(entity);
+        };
 
-        player->Unlock(static_cast<Barrier*>(entity), static_cast<Item*>(entityItem));
+        Barrier* barrier = getBarrier(targetName);
+        if (barrier == nullptr) { return; }
+
+        Item* key = getKey(keyName);
+        if (key == nullptr) { return; }
+
+        player->Unlock(barrier, key);        
     };
     commands["unlock"] = unlock;
 
     // --- ATTACK ---
     auto attack = [this, player](const vector<string>& args) {
         if (!player->inCombat) {
-            PushNotification("There is no one to attack here.");
+            PushNotification(NOT_ENEMY);
             return;
         }
 
@@ -202,17 +257,17 @@ void Command::RegisterCommands(Player* player) {
             Entity* entity = player->Find(name);
 
             if (!entity) { 
-                PushNotification("You don't possess that."); 
+                PushNotification(NOT_INV); 
                 return nullptr; }
 
             if (entity->GetType() != EntityType::ITEM) { 
-                PushNotification(entity->GetName() + " is not an item."); 
+                PushNotification(NOT_ITEM);
                 return nullptr; 
             }
 
             Item* item = static_cast<Item*>(entity);
             if (item->GetItemType() != ItemType::WEAPON) { 
-                PushNotification(item->GetName() + " is not a weapon."); 
+                PushNotification(NOT_ITEM);
                 return nullptr; 
             }
 
@@ -225,7 +280,7 @@ void Command::RegisterCommands(Player* player) {
                 player->GetRoom()->FindAllOfType(EntityType::ENEMY, enemies);
                 
                 if (enemies.empty()) { 
-                    PushNotification("There is no one to attack here."); 
+                    PushNotification(NOT_ENEMY); 
                     return nullptr; 
                 }
 
@@ -239,7 +294,7 @@ void Command::RegisterCommands(Player* player) {
             else {
                 Entity* entity = player->GetRoom()->Find(name);
                 if (!entity || entity->GetType() != EntityType::ENEMY) {
-                    PushNotification("There is no such enemy in the room.");
+                    PushNotification(NOT_ENEMY);
                     return nullptr;
                 }
                 return static_cast<Enemy*>(entity);
@@ -249,7 +304,6 @@ void Command::RegisterCommands(Player* player) {
         string targetName = "";
         string weaponName = "";
 
-        // Parse Arguments
         switch (args.size()) {
         case 0: // attack
             break;
@@ -258,21 +312,21 @@ void Command::RegisterCommands(Player* player) {
             break;
         case 2: // attack with [weapon]
             if (args[0] != "with") { 
-                PushNotification("Command not recognized."); 
+                PushNotification(NOT_REC); 
                 return; 
             }
             weaponName = args[1];
             break;
         case 3: // attack [enemy] with [weapon]
             if (args[1] != "with") { 
-                PushNotification("Command not recognized."); 
+                PushNotification(NOT_REC); 
                 return; 
             }
             targetName = args[0];
             weaponName = args[2];
             break;
         default:
-            PushNotification("Command not recognized.");
+            PushNotification(NOT_REC);
             return;
         }
 
@@ -298,7 +352,7 @@ void Command::ExecuteCommand(const string& command, const vector<string>& args) 
 		it->second(args);
 	}
 	else {
-		cout << "Command not recognized.\n";
+		PushNotification(NOT_REC);
 	}
 }
 
