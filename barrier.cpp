@@ -7,7 +7,7 @@ Barrier::Barrier(const string& name, const string& description, Entity* key, boo
 	Entity(name, description, parent),
 	key(key), isLocked(isLocked)
 {
-	type = EntityType::BARRIER;	
+	type = EntityType::BARRIER;
 
 	isOpen = false;
 }
@@ -31,6 +31,7 @@ bool Barrier::IsLocked() const {
 }
 
 bool Barrier::TryUnlock(Item* item) {
+	if (item == nullptr) { return false; }
 	if (item != key) { return false; }
 
 	Unlock();
