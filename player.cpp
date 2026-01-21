@@ -96,7 +96,6 @@ bool Player::Open(Barrier* barrier) {
 		string print = "You found: ";
 
 		for (Entity* item : items) {
-			item->SetParent(parent);
 			print += item->GetName() + " ";
 		}
 
@@ -133,6 +132,18 @@ bool Player::Drop(Item* item) {
 	}
 
 	return success;
+}
+
+bool Player::Place(Item* item, Barrier* place) {
+	if (item == nullptr || place == nullptr) {
+		PushNotification(NOT_HERE);
+		return false;
+	}
+
+	item->SetParent(place);
+	PushNotification("You placed " + item->GetName() + " in " + place->GetName() + ".");
+
+	return true;
 }
 
 bool Player::Attack(Creature* target, Item* weapon) {

@@ -168,6 +168,57 @@ void Command::RegisterCommands(Player* player) {
     };
     commands["drop"] = drop;
 
+    // --- PLACE ---
+    auto place = [player](const vector<string>& args) {
+        if (args.size() != 3 || args[1] != "in") { // place [item] in [barrier]
+            PushNotification(NOT_REC);
+            return;
+        }
+
+        const string& itemName = args[0];
+        const string& placeName = args[2];
+
+        auto getItemFromInventory = [&](const string& name) -> Item* {
+            Entity* entity = player->Find(name);
+
+            if (entity == nullptr) {
+                PushNotification(NOT_INV);
+                return nullptr;
+            }
+
+            if (entity->GetType() != EntityType::ITEM) {
+                PushNotification("You can't place that.");
+                return nullptr;
+            }
+
+            return static_cast<Item*>(entity);
+        };
+
+        auto getItemFromRoom = [&](const string& name) -> Barrier* {
+            Entity* entity = player->GetRoom()->Find(name);
+
+            if (entity == nullptr) {
+                PushNotification(NOT_HERE);
+                return nullptr;
+            }
+
+            if (entity->GetType() != EntityType::BARRIER) {
+                PushNotification("You can't take that.");
+                return nullptr;
+            }
+
+            return static_cast<Barrier*>(entity);
+        };
+
+        Item* item = getItemFromInventory(itemName);
+        Barrier* place = getItemFromRoom(placeName);
+
+        if (item != nullptr) {
+            player->Place(item, place);
+        }
+    };
+    commands["place"] = place;
+
     // --- INVENTORY ---
     auto inventory = [player](const vector<string>& args) {
         if (!args.empty()) { // inventory

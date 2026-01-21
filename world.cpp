@@ -44,22 +44,6 @@ World::World() {
 		"Chapel",
 		"The spacious room brimmed with a soft and warm light. There are 3 empty plates, looks like you should drop something there."
 	);
-	chapel->SetCustomUpdate([chapel]() {
-		Entity* e1 = chapel->Find("cross");
-		Entity* e2 = chapel->Find("garlic");
-		Entity* e3 = chapel->Find("stake");
-
-		static bool puzzleSolved = false;
-
-		if (e1 && e2 && e3 && !puzzleSolved) {
-			Entity* box = chapel->Find("box");
-			if (box != nullptr) {
-				static_cast<Barrier*>(box)->Unlock();
-				PushNotification("Box is unlocked.");
-				puzzleSolved = true;
-			}
-		}
-		});
 	Room* mainChambers = new Room(
 		"Main Chambers",
 		"A suffocating darkness filled the room. In the center, a single coffin lay still."
@@ -182,6 +166,30 @@ World::World() {
 		"Looks like the key for the entrance.",
 		box
 	);
+	Barrier* plate1 = new Barrier(
+		"plate1",
+		"There is a little cross drawn on it.",
+		nullptr,
+		false,
+		chapel
+	);
+	plate1->Open();
+	Barrier* plate2 = new Barrier(
+		"plate2",
+		"There is a circle drawn on it.",
+		nullptr,
+		false,
+		chapel
+	);
+	plate2->Open();
+	Barrier* plate3 = new Barrier(
+		"plate3",
+		"There is a triangle drawn on it.",
+		nullptr,
+		false,
+		chapel
+	);
+	plate3->Open();
 
 	entities.push_back(cross);
 	entities.push_back(sword);
@@ -191,6 +199,26 @@ World::World() {
 	entities.push_back(book);
 	entities.push_back(relic);
 	entities.push_back(gateKey);
+	entities.push_back(plate1);
+	entities.push_back(plate2);
+	entities.push_back(plate3);
+
+	chapel->SetCustomUpdate([chapel, plate1, plate2, plate3]() {
+		Entity* e1 = plate1->Find("cross");
+		Entity* e2 = plate2->Find("garlic");
+		Entity* e3 = plate3->Find("stake");
+
+		static bool puzzleSolved = false;
+
+		if (e1 && e2 && e3 && !puzzleSolved) {
+			Entity* box = chapel->Find("box");
+			if (box != nullptr) {
+				static_cast<Barrier*>(box)->Unlock();
+				PushNotification("Box is unlocked.");
+				puzzleSolved = true;
+			}
+		}
+	});
 
 	// --- BARRIERS WITH KEYS ---
 	Barrier* towerDoor = new Barrier(
@@ -217,6 +245,7 @@ World::World() {
 
 	entities.push_back(towerDoor);
 	entities.push_back(trapdoor);
+	entities.push_back(gate);
 
 	// --- CREATURES ---
 	player = new Player(
@@ -233,7 +262,7 @@ World::World() {
 	vampire->SetHealth(1000000000);
 
 	entities.push_back(player);
-	entities.push_back(vampire);	
+	entities.push_back(vampire);
 
 	commandSystem = new Command();
 	commandSystem->RegisterCommands(player);

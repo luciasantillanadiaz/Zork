@@ -28,13 +28,25 @@ void Room::Look() const {
 				PushNotification("There is a " + e->GetName() + ".");
 			}
 		}
+		else if (entity->GetType() == EntityType::BARRIER) {
+			PushNotification("There is a " + entity->GetName() + ".");
+
+			Barrier* barrier = static_cast<Barrier*>(entity);
+			if (!barrier->IsOpen()) { continue; }
+
+			for (Entity* item : barrier->contains) {
+				if (item->GetType() == EntityType::ITEM) {
+					PushNotification("Inside there is a " + item->GetName() + ".");
+				}
+			}
+		}
 		else {
 			PushNotification("There is a " + entity->GetName() + ".");
 		}
 	}
 }
 
-Exit* Room::GetExit(Direction direction) const {
+Exit* Room::GetExit(Direction direction) {
 	for (Entity* e : contains) {
 		if (e->GetType() == EntityType::EXIT) {
 			Exit* exit = static_cast<Exit*>(e);
