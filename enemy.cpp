@@ -20,7 +20,7 @@ Enemy::Enemy(const string& name, const string& description, Room* room) :
 	type = EntityType::ENEMY;
 
     isStunned = false;
-    maxHealth = GetHealth();
+    maxHealth = 0;
 	lastMoveTime = steady_clock::now();
 }
 
@@ -46,6 +46,7 @@ void Enemy::Update() {
     if (player != nullptr) {
         if (!inCombat && !isStunned) { 
             inCombat = true; 
+            maxHealth = GetHealth();
             lastMoveTime = currentTime;
         }
 
