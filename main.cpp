@@ -109,5 +109,12 @@ int main() {
     }
 
     cout << "\nThanks for playing!\n";
+    cout << "\nPress any key to exit.\n";
+
+    while (_kbhit()) {
+        (void)_getch();
+    }
+    (void)_getch();
+
     return 0;
 }
