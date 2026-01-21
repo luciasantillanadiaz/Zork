@@ -87,6 +87,8 @@ bool Creature::Attack(Creature* target, Item* weapon) {
 }
 
 void Creature::ReceiveDamage(int damage) {
+	health -= damage;
+
 	if (IsAlive() == false) {
 		Die();
 	}		
