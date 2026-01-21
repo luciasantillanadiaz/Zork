@@ -36,11 +36,12 @@ void Enemy::Update() {
 
     Player* player = PlayerInRoom();
 
-    if (elapsedSeconds >= STUN_DURATION) {
-        isStunned = false;
+    if (isStunned && elapsedSeconds < STUN_DURATION) {
+        lastMoveTime = currentTime;
+        return;
     }
     else {
-        return;
+        isStunned = false;
     }
 
     if (player != nullptr) {
@@ -66,7 +67,7 @@ void Enemy::Update() {
         return;
     }
 
-    if (elapsedSeconds >= 3) {
+    if (elapsedSeconds >= ROAM_INTERVAL) {
         list<Entity*> exits;
         parent->FindAllOfType(EntityType::EXIT, exits);
 
