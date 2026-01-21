@@ -1,51 +1,109 @@
-# Zork
-- Author: Lucía Santillana Díaz
-- GitHub link: https://github.com/luciasantillanadiaz/Zork
-- License: MIT License
+# My Zork: Castle Escape
 
-# Goal
-Get out of the castle.
+A text-based adventure game written in C++. Explore a haunted castle, solve puzzles, and escape before the vampire catches you.
 
-# Commands
-- look/l/look [something]
-- north/n, south/s, east/e, west/w, up/u, down/d
-- move/walk/go [north, south, east, west, up, down]
-- take/get/pick [item]
-- drop [item]
-- inventory/i
-- place [item] in [something]
-- health/h
-- open [something]
-- unlock [something] with [item]
-- attack/fight/attack with [weapon]/attack [enemy]/attack [enemy] with [weapon]
+**Link to Repository:** [Zork](https://github.com/luciasantillanadiaz/Zork)
 
-# Enemies behaviour
-- Can move around in the castle.
-- Attack when they see you.
-- You both can't move to another room.
-- You can stun him for a few seconds.
+## About the Game
+You wake up in the Great Hall of a dark, decaying castle. Your memory is hazy, but one thing is clear: you must escape. To do so, you will need to find items, unlock hidden paths, and solve the mystery of the Chapel. But be careful... you are not alone.
+
+**Authors:** Lucía Santillana Díaz
+
+## How to Play
+
+### Controls
+Type your commands into the console and press **Enter**. The game is case-insensitive (you can use `LOOK` or `look`).
+
+**Movement:**
+* `north` / `n`: Move North
+* `south` / `s`: Move South
+* `east`  / `e`: Move East
+* `west`  / `w`: Move West
+* `up`    / `u`: Go up stairs
+* `down`  / `d`: Go down stairs
+
+**Actions:**
+* `look` / `l`: Look at the room or examine an item (e.g., `look sword`).
+* `take [item]`: Pick up an item (e.g., `take key`).
+* `drop [item]`: Drop an item from your inventory.
+* `inventory` / `i`: Check what you are carrying.
+* `open [barrier]`: Open a door, chest, or container.
+* `unlock [barrier] with [key]`: Unlock a locked door/container using a specific key.
+* `place [item] in [container]`: Put an item inside a specific container/pedestal.
+* `attack` / `attack [enemy]` / `attack with [weapon]` / `attack [enemy] with [weapon]`: Attack an enemy.
+* `quit` / `q`: Exit the game.
+
+---
+
+## Walkthrough (Guide to Finish)
 
 <details>
   <summary>How to pass the game step by step</summary>
-  
-- You start at the Main Hall with nothing.
-- There are 4 exits, you should take East or West first.
-- If you took West, take everything and then go North from there.
-- Go back to the Main Hall.
-- To the East, you find a book with a hint of what you have to do.
-- There is a trapdoor there, which cannot be opened for now.
-- Back to the Main Hall go North 2 times.
-- You are now in the Aisle, there is an enemy near.
-- The enemies can move between rooms and they attack when they see you.
-- They are practically inmortal, so you should run when you can.
-- Use the sword to stun him faster.
-- If the enemy hasn't moved, it should be to the West.
-- Go to the West and stun him. Take what's in the drawer and go back.
-- Now you have a key, it opens the door to the East.
-- Take everything and go to the Main Hall.
-- Enter the Library (East) and open the trapdoor with the relic.
-- There are 3 pedestals where you must place in order: cross, garlic and stake.
-- Once done you obtain the gate-key, it opens the gate at the Main Hall.
-- Go through the gate.
-  
+
+1.  **Start:** You are in the **Great Hall**.
+2.  Go **West** to the **Banquet Hall**.
+3.  `take sword` (Attack with this).
+7.  `take stake`.
+4.  Go **North** to the **Kitchen**.
+5.  `take garlic`.
+6.  Go **South** back to the **Banquet Hall**.
+8.  Go **East** to the **Great Hall**.
+9.  Go **North** up the **Stairs**.
+10. Go **North** to the **Aisle**.
+11. Go **West** to the **Main Chambers**.
+    * *Warning:* The **Vampire** is here! He has too much health to kill, but you can stun him if needed. Move quickly!
+12. `open drawer`.
+13. `take key` (This is the key for the Tower).
+14. Go **East** back to the **Aisle**.
+15. Go **East** to the Tower door.
+16. `unlock door with key`.
+17. `open door`.
+18. Go **East** into the **Tower**.
+19. `take cross`.
+20. `take relic`.
+21. Go **West** to **Aisle**, then **South** to **Stairs**, then **South** to **Great Hall**.
+22. Go **East** to the **Library**.
+23. `unlock trapdoor with relic`.
+24. `open trapdoor`.
+25. Go **Down** to the **Chapel**.
+26. You will see three pedestals. You must place the correct items to solve the puzzle:
+    * `place cross in cross-pedestal`
+    * `place garlic in circle-pedestal`
+    * `place stake in triangle-pedestal`
+27. The box unlocks.
+28. `open box`.
+29. `take gate-key`.
+30. Go **Up** to **Library**, then **West** to **Great Hall**.
+32. `unlock gate with gate-key`.
+33. `open gate`.
+34. Go **South** to **The Exterior**.
+
+**CONGRATULATIONS! YOU HAVE ESCAPED!**
+
 </details>
+
+---
+
+## License
+
+MIT License
+
+Copyright (c) 2026 Lucía Santillana Díaz 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
