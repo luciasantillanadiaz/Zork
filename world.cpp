@@ -42,7 +42,7 @@ World::World() {
 	);
 	Room* chapel = new Room(
 		"Chapel",
-		"The spacious room brimmed with a soft and warm light. There are 3 empty plates, looks like you should drop something there."
+		"The spacious room brimmed with a soft and warm light. There are 3 pedestals, looks like you should place something in there."
 	);
 	Room* mainChambers = new Room(
 		"Main Chambers",
@@ -167,24 +167,24 @@ World::World() {
 		box
 	);
 	Barrier* plate1 = new Barrier(
-		"plate1",
-		"There is a little cross drawn on it.",
+		"cross-pedestal",
+		"A marble pedestal with a cross carved into the surface.",
 		nullptr,
 		false,
 		chapel
 	);
 	plate1->Open();
 	Barrier* plate2 = new Barrier(
-		"plate2",
-		"There is a circle drawn on it.",
+		"circle-pedestal",
+		"A marble pedestal with a circle carved into the surface.",
 		nullptr,
 		false,
 		chapel
 	);
 	plate2->Open();
 	Barrier* plate3 = new Barrier(
-		"plate3",
-		"There is a triangle drawn on it.",
+		"triangle-pedestal",
+		"A marble pedestal with a triangle carved into the surface.",
 		nullptr,
 		false,
 		chapel
@@ -250,13 +250,13 @@ World::World() {
 	// --- CREATURES ---
 	player = new Player(
 		"Player",
-		"A disoriented person who ended up in a strange castle.",
+		"You feel disoriented, wondering how you ended up in this strange castle.",
 		greatHall
 	);
 
 	Enemy* vampire = new Enemy(
 		"Vampire",
-		"A vampire who lived a very long life.",
+		"The vampire was ancient. His visage was gaunt and ruined, unrecognizable compared to the noble face in the portrait.",
 		mainChambers
 	);
 	vampire->SetHealth(1000000000);

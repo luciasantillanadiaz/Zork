@@ -24,8 +24,10 @@ void Room::Look() const {
 		if (entity->GetType() == EntityType::PLAYER) { return; }
 
 		if (entity->GetType() == EntityType::EXIT) {
+			string dir = DirToString(static_cast<Exit*>(entity)->GetDirection(this));
+			PushNotification("There is an exit direction " + dir + ".");
 			for (Entity* e : entity->contains) {
-				PushNotification("There is a " + e->GetName() + ".");
+				PushNotification("There is a " + e->GetName() + " direction " + dir + ".");
 			}
 		}
 		else if (entity->GetType() == EntityType::BARRIER) {
