@@ -12,12 +12,6 @@ using namespace std;
 Command::Command() { }
 Command::~Command() { }
 
-const string NOT_REC = "Command not recognized.";
-const string NOT_INV = "You don't have that.";
-const string NOT_HERE = "There is no such thing here.";
-const string NOT_ITEM = "You can't use that.";
-const string NOT_ENEMY = "There is no one to attack here.";
-
 void Command::RegisterCommands(Player* player) {
     // --- LOOK ---
     auto look = [player](const vector<string>& args) {

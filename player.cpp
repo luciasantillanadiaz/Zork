@@ -18,28 +18,37 @@ Player::Player(const string& name, const string& description, Room* room) :
 Player::~Player() { }
 
 void Player::Unlock(Barrier* barrier, Item* key) {
+	if (inCombat) {
+		PushNotification(IN_COM);
+		return;
+	}
+
 	if (barrier == nullptr || key == nullptr) { return; }
 
 	if (key->GetParent() != this) {
-		cout << "You don't have the item " << key->GetName() << ".\n";
+		PushNotification(NOT_INV);
 		return;
 	}
 
 	if (barrier->TryUnlock(key)) {
-		cout << barrier->GetName() << " is unlocked.\n";
+		PushNotification(barrier->GetName() + " is unlocked.");
 	}
 	else {
-		cout << "Try with something else.\n";
+		PushNotification("Try with something else.");
 	}
 }
 
 bool Player::Move(Direction direction) {
-	Room* room = GetRoom();
+	if (inCombat) {
+		PushNotification(IN_COM);
+		return false;
+	}
 
+	Room* room = GetRoom();
 	Exit* exit = room->GetExit(direction);
 
 	if (exit == nullptr) {
-		cout << "There is a wall.\n";
+		PushNotification("There is a wall.");
 		return false;
 	}
 
@@ -47,46 +56,54 @@ bool Player::Move(Direction direction) {
 
 	if (success) {
 		GetRoom()->Look();
+		if (EnemyIsNear()) {
+			PushNotification("Footsteps can be heard nearby...");
+		}
 	}
 	else {
-		cout << "It's closed.\n";
+		PushNotification("It's closed.");
 	}
 
 	return success;
 }
 
 bool Player::Open(Barrier* barrier) {
+	if (inCombat) {
+		PushNotification(IN_COM);
+		return  false;
+	}
+
 	if (barrier == nullptr) {
-		cout << "There is nothing to open.\n";
+		PushNotification(NOT_HERE);
 		return false;
 	}
 
 	if (barrier->IsOpen()) {
-		cout << barrier->GetName() << " it's already open.\n";
+		PushNotification(barrier->GetName() + " it's already open.");
 		return false;
 	}
 
 	bool success = Creature::Open(barrier);
 
 	if (success) {
-		cout << "You opened " << barrier->GetName() << ".\n";
+		PushNotification("You opened " + barrier->GetName() + ".");
 
 		list<Entity*> items;
 		barrier->FindAllOfType(EntityType::ITEM, items);
 
 		if (items.empty()) { return success; }
 
-		cout << "You found: ";
+		string print = "You found: ";
 
 		for (Entity* item : items) {
 			item->SetParent(parent);
-			cout << item->GetName() << " ";
+			print += item->GetName() + " ";
 		}
 
-		cout << "\n";
+		PushNotification(print);
 	}
 	else {
-		cout << "It's locked.\n";
+		PushNotification("It's locked.");
 	}
 
 	return success;
@@ -96,10 +113,10 @@ bool Player::Take(Item* item) {
 	bool success = Creature::Take(item);
 
 	if (success) {
-		cout << "You take " << item->GetName() << ".\n";
+		PushNotification("You take " + item->GetName() + ".");
 	}
 	else {
-		cout << "There is nothing like that here.\n";
+		PushNotification(NOT_HERE);
 	}
 
 	return success;
@@ -109,10 +126,10 @@ bool Player::Drop(Item* item) {
 	bool success = Creature::Drop(item);
 
 	if (success) {
-		cout << "You dropped " << item->GetName() << ".\n";
+		PushNotification("You dropped " + item->GetName() + ".");
 	}
 	else {
-		cout << "You don't have the item " << item->GetName() << ".\n";
+		PushNotification(NOT_INV);
 	}
 
 	return success;
@@ -121,15 +138,20 @@ bool Player::Drop(Item* item) {
 bool Player::Attack(Creature* target, Item* weapon) {
 	if (weapon != nullptr) {
 		if (weapon->GetParent() != this) {
-			cout << "You don't have the item " << weapon->GetName() << ".\n";
+			PushNotification(NOT_INV);
 			return false;
 		}
-		cout << "You attacked with " << weapon->GetName() << ".\n";
+
+		if (weapon->GetItemType() != ItemType::WEAPON) {
+			PushNotification(NOT_ITEM);
+			return false; 
+		}
+		PushNotification("You attacked with " + weapon->GetName() + ".");
+		return Creature::Attack(target, weapon);
 	}
 		
-	cout << "You attacked bare-handed.\n";
-
-	return true;
+	PushNotification("You attacked bare-handed.");
+	return Creature::Attack(target, weapon);
 }
 
 void Player::GetInventory() const {
@@ -137,15 +159,16 @@ void Player::GetInventory() const {
 	FindAllOfType(EntityType::ITEM, inventoryList);
 
 	if (inventoryList.empty()) {
-		cout << "There is nothing in your inventory.\n";
+		PushNotification("There is nothing in your inventory.");
 		return;
 	}
 
+	string print = "";
 	for (Entity* item : inventoryList) {
-		cout << item->GetName() << ", ";
+		 print += item->GetName() + " ";
 	}
 	
-	cout << ".\n";
+	PushNotification(print);
 }
 
 void Player::Update() {
