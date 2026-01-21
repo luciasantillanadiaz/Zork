@@ -202,7 +202,8 @@ void Command::RegisterCommands(Player* player) {
                 return nullptr;
             }
 
-            if (entity->GetType() != EntityType::BARRIER) {
+            if (entity->GetType() != EntityType::BARRIER || 
+                entity->GetParent()->GetType() == EntityType::EXIT) {
                 PushNotification("You can't place something there.");
                 return nullptr;
             }
