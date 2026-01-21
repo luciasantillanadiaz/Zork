@@ -132,6 +132,8 @@ void Command::RegisterCommands(Player* player) {
         }
     };
     commands["take"] = take;
+    commands["get"] = take;
+    commands["pick"] = take;
 
     // --- DROP ---
     auto drop = [player](const vector<string>& args) {
@@ -176,6 +178,17 @@ void Command::RegisterCommands(Player* player) {
     };
     commands["inventory"] = inventory;
     commands["i"] = inventory;
+
+    // --- HEALTH ---
+    auto health = [player](const vector<string>& args) {
+        if (!args.empty()) { // health
+            PushNotification(NOT_REC);
+            return;
+        }
+        PushNotification("You have " + to_string(player->GetHealth()) + " life points.");
+    };
+    commands["health"] = health;
+    commands["h"] = health;
 
     // --- OPEN ---
     auto open = [player](const vector<string>& args) {
