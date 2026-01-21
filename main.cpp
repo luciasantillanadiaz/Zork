@@ -9,6 +9,7 @@
 #include <windows.h>
 #include "world.h"
 #include "command.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -27,18 +28,27 @@ vector<string> ParseInput(string& input) {
     );
 }
 
+void PrintNotification(const string& message, const string& currentUserInput) {
+    cout << "\r" << string(80, ' ') << "\r";
+    cout << message << "\n";
+    cout << "> " << currentUserInput;
+}
+
 int main() {
     string input;
     vector<string> commands;
+    bool isRunning = true;
 
     World world;
     Command* commandSystem = world.GetCommandSystem();
+
+    srand(time(NULL));
 
     cout << RED << BOLD << " --- WELCOME TO MY ZORK! ---\n" << RESET;
 
     commands.push_back("look");
 
-    while (true) {
+    while (isRunning) {
         if (_kbhit()) {
             char key = _getch();
 
@@ -52,18 +62,21 @@ int main() {
                 input += key;
                 cout << key;
             }
-            else { 
-                cout << "\n";
+            else {                
                 if (!input.empty()) {
+                    cout << "\n";
                     commands = ParseInput(input);
                     input.clear();
+                }
+                else {
+                    cout << "\n> ";
                 }
             }
         }
 
         if (!commands.empty()) {
 
-            if (commands[0] == "quit") break;
+            if (commands[0] == "quit" || commands[0] == "q") break;
 
             string action = commands[0];
             vector<string> args;
@@ -80,6 +93,17 @@ int main() {
         }
 
         world.Update();
+
+        if (!notificationQueue.empty()) {
+            for (const string& msg : notificationQueue) {
+                PrintNotification(msg, input);
+                if (msg == "THE END") {
+                    isRunning = false;
+                    break;
+                }
+            }
+            notificationQueue.clear();
+        }
 
         Sleep(10);
     }
