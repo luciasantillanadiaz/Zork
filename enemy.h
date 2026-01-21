@@ -21,5 +21,6 @@ public:
 	bool isStunned;
 
 private:
+	int maxHealth;
 	std::chrono::steady_clock::time_point lastMoveTime;
 };

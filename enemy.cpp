@@ -9,12 +9,18 @@
 using namespace std;
 using namespace std::chrono;
 
+const int MAX_DAMAGE = 10;
+const int WAIT_INTERVAL = 10;
+const int STUN_DURATION = 20;
+const int ROAM_INTERVAL = 60;
+
 Enemy::Enemy(const string& name, const string& description, Room* room) :
 	Creature(name, description, room)
 {
 	type = EntityType::ENEMY;
 
     isStunned = false;
+    maxHealth = GetHealth();
 	lastMoveTime = steady_clock::now();
 }
 
@@ -23,12 +29,6 @@ Enemy::~Enemy() { }
 bool Enemy::Attack(Creature* target, Item* weapon) {
     return Creature::Attack(target, weapon);
 }
-
-int maxHealth = 0;
-const int MAX_DAMAGE = 10;
-const int WAIT_INTERVAL = 10;
-const int STUN_DURATION = 20;
-const int ROAM_INTERVAL = 60;
 
 void Enemy::Update() {
     auto currentTime = steady_clock::now();
@@ -47,7 +47,6 @@ void Enemy::Update() {
         if (!inCombat && !isStunned) { 
             inCombat = true; 
             lastMoveTime = currentTime;
-            maxHealth = GetHealth();
         }
 
         elapsedSeconds = duration_cast<seconds>(currentTime - lastMoveTime).count();
