@@ -12,6 +12,7 @@
     <ClCompile Include="room.cpp" />
     <ClCompile Include="world.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="globals.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="barrier.h" />
@@ -24,5 +25,6 @@
     <ClInclude Include="room.h" />
     <ClInclude Include="world.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="globals.h" />
   </ItemGroup>
 </Project>
