@@ -9,6 +9,7 @@
 #include "barrier.h"
 #include "command.h"
 #include "enemy.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -40,8 +41,24 @@ World::World() {
 	);
 	Room* chapel = new Room(
 		"Chapel",
-		"The spacious room brimmed with a soft and warm light."
+		"The spacious room brimmed with a soft and warm light. There are 3 empty plates, looks like you should drop something there."
 	);
+	chapel->SetCustomUpdate([chapel]() {
+		Entity* e1 = chapel->Find("cross");
+		Entity* e2 = chapel->Find("garlic");
+		Entity* e3 = chapel->Find("stake");
+
+		static bool puzzleSolved = false;
+
+		if (e1 && e2 && e3 && !puzzleSolved) {
+			Entity* box = chapel->Find("box");
+			if (box != nullptr) {
+				static_cast<Barrier*>(box)->Unlock();
+				PushNotification("Box is unlocked.");
+				puzzleSolved = true;
+			}
+		}
+		});
 	Room* mainChambers = new Room(
 		"Main Chambers",
 		"Main Chambers"
@@ -66,8 +83,8 @@ World::World() {
 	entities.push_back(tower);
 	entities.push_back(aisle);
 
-	// Exists
-	Exit* GHtoEx = new Exit(
+	// EXITS
+	Exit* GHtoEX = new Exit(
 		Direction::SOUTH, greatHall, exterior, false
 	);
 	Exit* GHtoLI = new Exit(
@@ -95,7 +112,7 @@ World::World() {
 		Direction::EAST, aisle, tower, true
 	);
 
-	entities.push_back(GHtoEx);
+	entities.push_back(GHtoEX);
 	entities.push_back(GHtoLI);
 	entities.push_back(GHtoBH);
 	entities.push_back(GHtoST);

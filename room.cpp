@@ -64,3 +64,15 @@ Entity* Room::Find(const string& targetName) const {
 
 	return nullptr;
 }
+
+void Room::Update() {
+	Entity::Update();
+
+	if (customUpdate) {
+		customUpdate();
+	}
+}
+
+void Room::SetCustomUpdate(function<void()> updateLogic) {
+	customUpdate = updateLogic;
+}
