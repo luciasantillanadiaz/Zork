@@ -3,6 +3,9 @@
 #include "item.h"
 #include "barrier.h"
 #include "room.h"
+#include "exit.h"
+#include "globals.h"
+#include "enemy.h"
 
 using namespace std;
 
@@ -143,4 +146,53 @@ void Player::GetInventory() const {
 	}
 	
 	cout << ".\n";
+}
+
+void Player::Update() {
+	Enemy* enemy = EnemyInRoom();
+	if (enemy != nullptr) {
+		if (!inCombat && !enemy->isStunned) {
+			inCombat = true;
+			PushNotification("The enemy is staring at you, ready to fight.");
+		}
+		return;
+	}
+	else {
+		inCombat = false;
+	}
+}
+
+bool Player::EnemyIsNear() {
+	list<Entity*> exits;
+	parent->FindAllOfType(EntityType::EXIT, exits);
+
+	for (Entity* exit : exits) {
+		Exit* ex = static_cast<Exit*>(exit);
+		Room* room = ex->GetDestinationFrom(static_cast<Room*>(parent));
+
+		if (room == nullptr) { continue; }
+
+		list<Entity*> enemies;
+		room->FindAllOfType(EntityType::ENEMY, enemies);
+
+		if (!enemies.empty()) { return true; }
+	}
+
+	return false;
+}
+
+Enemy* Player::EnemyInRoom() {
+	list<Entity*> enemies;
+	parent->FindAllOfType(EntityType::ENEMY, enemies);
+
+	if (!enemies.empty()) { 
+		return static_cast<Enemy*>(enemies.front()); 
+	}
+
+	return nullptr;
+}
+
+void Player::Die() {
+	PushNotification("YOU DIED!");
+	PushNotification("THE END");
 }

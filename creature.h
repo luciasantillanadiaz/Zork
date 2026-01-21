@@ -18,7 +18,8 @@ public:
 	virtual bool Drop(Item* item);
 	virtual bool Attack(Creature* target, Item* item);
 	void ReceiveDamage(int damage);
-	void Die();
+	virtual void Die();
+	void Update() override;
 
 	bool IsAlive() const;
 	int GetHealth() const;

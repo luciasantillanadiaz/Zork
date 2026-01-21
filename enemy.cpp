@@ -3,6 +3,8 @@
 #include "enemy.h"
 #include "exit.h"
 #include "room.h"
+#include "player.h"
+#include "globals.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -12,16 +14,59 @@ Enemy::Enemy(const string& name, const string& description, Room* room) :
 {
 	type = EntityType::ENEMY;
 
+    isStunned = false;
 	lastMoveTime = steady_clock::now();
 }
 
 Enemy::~Enemy() { }
 
+bool Enemy::Attack(Creature* target, Item* weapon) {
+    return Creature::Attack(target, weapon);
+}
+
+int maxHealth = 0;
+const int MAX_DAMAGE = 10;
+const int WAIT_INTERVAL = 10;
+const int STUN_DURATION = 20;
+const int ROAM_INTERVAL = 60;
+
 void Enemy::Update() {
     auto currentTime = steady_clock::now();
     auto elapsedSeconds = duration_cast<seconds>(currentTime - lastMoveTime).count();
 
-    if (elapsedSeconds >= 60) {
+    Player* player = PlayerInRoom();
+
+    if (elapsedSeconds >= STUN_DURATION) {
+        isStunned = false;
+    }
+    else {
+        return;
+    }
+
+    if (player != nullptr) {
+        if (!inCombat && !isStunned) { 
+            inCombat = true; 
+            lastMoveTime = currentTime;
+            maxHealth = GetHealth();
+        }
+
+        elapsedSeconds = duration_cast<seconds>(currentTime - lastMoveTime).count();
+        if (elapsedSeconds >= WAIT_INTERVAL) {
+            Attack(player, nullptr);
+            lastMoveTime = currentTime;
+        }
+        if (GetHealth() <= maxHealth - MAX_DAMAGE) {
+            isStunned = true;
+            inCombat = false;
+            player->inCombat = false;
+            maxHealth = GetHealth();
+            lastMoveTime = currentTime;
+            PushNotification(name + " is stunned. You can move now.");
+        }
+        return;
+    }
+
+    if (elapsedSeconds >= 3) {
         list<Entity*> exits;
         parent->FindAllOfType(EntityType::EXIT, exits);
 
@@ -42,4 +87,23 @@ void Enemy::Update() {
 
         lastMoveTime = currentTime;
     }
+
+    return;
+}
+
+Player* Enemy::PlayerInRoom() {
+    list<Entity*> players;
+    parent->FindAllOfType(EntityType::PLAYER, players);
+
+    if (!players.empty()) { 
+        return static_cast<Player*>(players.front()); 
+    }
+
+    return nullptr;
+}
+
+void Enemy::Die() {
+    Creature::Die();
+    parent->contains.remove(this);
+    SetParent(nullptr);
 }

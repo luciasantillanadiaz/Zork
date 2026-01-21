@@ -121,3 +121,7 @@ void Creature::SetHealth(int hp) {
 void Creature::SetStrength(int str) {
 	strength = str;
 }
+
+void Creature::Update() {
+	return Entity::Update();
+}
