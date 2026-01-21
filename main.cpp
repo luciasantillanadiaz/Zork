@@ -42,7 +42,7 @@ int main() {
     World world;
     Command* commandSystem = world.GetCommandSystem();
 
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
 
     cout << RED << BOLD << " --- WELCOME TO MY ZORK! ---\n" << RESET;
 
