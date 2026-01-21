@@ -211,7 +211,10 @@ void Command::RegisterCommands(Player* player) {
         };
 
         Item* item = getItemFromInventory(itemName);
+        if (item == nullptr) { return; }
+
         Barrier* place = getItemFromRoom(placeName);
+        if (place == nullptr) { return; }
 
         if (item != nullptr) {
             player->Place(item, place);
