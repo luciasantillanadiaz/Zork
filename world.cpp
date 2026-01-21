@@ -14,11 +14,12 @@
 using namespace std;
 
 World::World() {
-	// Rooms
+	// --- ROOMS ---
 	Room* exterior = new Room(
 		"The Exterior",
 		"It felt like ages since the fresh smell filled your lungs. Now finally free, it's time to go home."
 	);
+	endRoom = exterior;
 	Room* greatHall = new Room(
 		"Great Hall", 
 		"The lights flickered to life. They revealed a large hall, smelling of dust and decay. Above, a massive chandelier swayed with an ominous sound."
@@ -83,7 +84,7 @@ World::World() {
 	entities.push_back(tower);
 	entities.push_back(aisle);
 
-	// EXITS
+	// --- EXITS ---
 	Exit* GHtoEX = new Exit(
 		Direction::SOUTH, greatHall, exterior, false
 	);
@@ -122,15 +123,100 @@ World::World() {
 	entities.push_back(AItoMC);
 	entities.push_back(AItoTO);
 
-	// Items
-	Item* cross = new Item(
-		"Cross",
-		"A carved cross with strange symbols. When touched a wave of calmness spreads through your body, it felt warm.",
+	// --- BARRIERS WITHOUT KEYS ---
+	Barrier* drawer = new Barrier(
+		"drawer",
+		"It's a drawer.",
+		nullptr,
+		false,
+		mainChambers
+	);
+	Barrier* box = new Barrier(
+		"box",
+		"Maybe it's related to the plates.",
+		drawer, // It can't be open by a simple key
+		true,
 		chapel
 	);
-	entities.push_back(cross);
 
-	// Creatures
+	// ITEMS
+	Item* cross = new Item(
+		"cross",
+		"A carved cross with strange symbols. When touched a wave of calmness spreads through your body, it felt warm.",
+		tower
+	);
+	Item* sword = new Item(
+		"sword",
+		"A very old sword, seems useful.",
+		banquetHall
+	);
+	sword->SetItemType(ItemType::WEAPON);
+	sword->SetDealingDamage(5);
+	Item* garlic = new Item(
+		"garlic",
+		"It's fresh.",
+		kitchen
+	);
+	Item* stake = new Item(
+		"stake",
+		"It's sharp.",
+		banquetHall
+	);
+	Item* key = new Item(
+		"key",
+		"It has a peculiar design.",
+		drawer
+	);
+	Item* book = new Item(
+		"book",
+		"To kill the inmortal you must find its 3 weaknesses.",
+		library
+	);
+	Item* relic = new Item(
+		"relic",
+		"It emmits a very powerfull energy.",
+		tower
+	);
+	Item* gateKey = new Item(
+		"gate-key",
+		"Looks like a key for the entrance.",
+		box
+	);
+	entities.push_back(cross);
+	entities.push_back(sword);
+	entities.push_back(garlic);
+	entities.push_back(stake);
+	entities.push_back(key);
+	entities.push_back(book);
+	entities.push_back(relic);
+	entities.push_back(gateKey);
+
+	// --- BARRIERS WITH KEYS ---
+	Barrier* towerDoor = new Barrier(
+		"door",
+		"A very peculiar door.",
+		key,
+		true,
+		AItoTO
+	);
+	Barrier* trapdoor = new Barrier(
+		"trapdoor",
+		"A powerfull seal was cast on it a long time ago. A warm sensation comes from it.",
+		relic,
+		true,
+		LItoCH
+	);
+	Barrier* gate = new Barrier(
+		"gate",
+		"A big gate.",
+		gateKey,
+		true,
+		GHtoEX
+	);
+	entities.push_back(towerDoor);
+	entities.push_back(trapdoor);
+
+	// --- CREATURES ---
 	player = new Player(
 		"Player",
 		"A disoriented person who ended up in a strange castle.",
@@ -142,9 +228,10 @@ World::World() {
 		"An old man.",
 		mainChambers
 	);
+	vampire->SetHealth(1000000000);
 
 	entities.push_back(player);
-	entities.push_back(vampire);
+	entities.push_back(vampire);	
 
 	commandSystem = new Command();
 	commandSystem->RegisterCommands(player);
@@ -160,12 +247,23 @@ World::~World() {
 	delete commandSystem;
 }
 
-Command* World::GetCommandSystem() const {
-	return commandSystem;
-}
-
 void World::Update() {
 	for (Entity* entity : entities) {
+		if (entity->GetType() == EntityType::ENEMY || entity->GetType() == EntityType::PLAYER) {
+			Creature* c = static_cast<Creature*>(entity);
+			if (!c->IsAlive()) {
+				entities.remove(c);
+				continue;
+			}
+		}
 		entity->Update();
+
+		if (player->GetParent() == endRoom) {
+			PushNotification("THE END");
+		}
 	}
+}
+
+Command* World::GetCommandSystem() const {
+	return commandSystem;
 }
