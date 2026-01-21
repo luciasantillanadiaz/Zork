@@ -51,7 +51,7 @@ Type your commands into the console and press **Enter**. The game is case-insens
 9.  Go **North** up the **Stairs**.
 10. Go **North** to the **Aisle**.
 11. Go **West** to the **Main Chambers**.
-    * *Warning:* The **Vampire** is here! He has too much health to kill, but you can stun him if needed. Move quickly!
+    * *Warning:* The **Vampire** is usually here, but it can move to other rooms. He has too much health to kill, but you can stun him with enough damage. 
 12. `open drawer`.
 13. `take key` (This is the key for the Tower).
 14. Go **East** back to the **Aisle**.
