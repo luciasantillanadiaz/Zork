@@ -38,6 +38,16 @@ bool Barrier::TryUnlock(Item* item) {
 	return true;
 }
 
+Entity* Barrier::Find(const string& targetName) {
+	if (GetName() == targetName) {
+		return this;
+	}
+
+	if (!IsOpen()) { return nullptr; }
+
+	return Entity::Find(targetName);
+}
+
 const Entity* Barrier::GetKey() const {
 	return key;
 }

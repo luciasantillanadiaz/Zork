@@ -39,7 +39,7 @@ public:
 
 	virtual void Look() const;
 	virtual void Update();
-	virtual Entity* Find(const std::string& targetName) const;
+	virtual Entity* Find(const std::string& targetName);
 
 protected:
 	EntityType type;

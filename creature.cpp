@@ -64,10 +64,17 @@ bool Creature::Open(Barrier* barrier) {
 bool Creature::Take(Item* item) {
 	if (item == nullptr) { return false; }
 
-	if (item->GetParent() != parent) { return false; }
+	list<Item*> items;
+	GetRoom()->FindAllTakeable(items);
 
-	item->SetParent(this);
-	return true;
+	for (Item* i : items) {
+		if (i == item) {
+			item->SetParent(this);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool Creature::Drop(Item* item) {

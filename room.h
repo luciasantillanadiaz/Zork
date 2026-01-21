@@ -4,6 +4,7 @@
 #include "entity.h"
 
 class Exit;
+class Item;
 
 class Room : public Entity {
 public:
@@ -11,7 +12,10 @@ public:
 	~Room();
 
 	void Look() const override;
-	Entity* Find(const std::string& targetName) const override;
+	Entity* Find(const std::string& targetName) override;
+	Entity* FindInExit(const std::string& targetName);
+	Entity* FindInBarrier(const std::string& targetName);
+	void FindAllTakeable(std::list<Item*>& items);
 	void Update() override;
 	void SetCustomUpdate(std::function<void()> updateLogic);
 

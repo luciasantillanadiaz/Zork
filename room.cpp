@@ -4,6 +4,7 @@
 #include "exit.h"
 #include "globals.h"
 #include "barrier.h"
+#include "item.h"
 
 using namespace std;
 
@@ -46,28 +47,68 @@ Exit* Room::GetExit(Direction direction) const {
 	return nullptr;
 }
 
-Entity* Room::Find(const string& targetName) const {
-	for (Entity* entity : contains) {
-		string name = entity->GetName();
-		transform(name.begin(), name.end(), name.begin(), ::tolower);
-		if (name == targetName) {
-			return entity;
-		}
-	}
+Entity* Room::Find(const string& targetName) {
+	Entity* ret;
 
+	ret = Entity::Find(targetName);
+	if (ret != nullptr) { return ret; }
+
+	ret = FindInExit(targetName);	
+	if (ret != nullptr) { return ret; }
+
+	ret = FindInBarrier(targetName);
+	if (ret != nullptr) { return ret; }
+
+	return nullptr;
+}
+
+Entity* Room::FindInExit(const string& targetName) {
 	list<Entity*> exits;
 	FindAllOfType(EntityType::EXIT, exits);
 	for (Entity* exit : exits) {
-		for (Entity* c : exit->contains) {
-			string name = c->GetName();
-			transform(name.begin(), name.end(), name.begin(), ::tolower);
-			if (name == targetName) {
-				return c;
-			}
+		Exit* e = static_cast<Exit*>(exit);
+		Entity* ret = e->Find(targetName);
+
+		if (ret != nullptr) { return ret; }
+	}
+	return nullptr;
+}
+
+Entity* Room::FindInBarrier(const string& targetName) {
+	list<Entity*> barriers;
+	FindAllOfType(EntityType::BARRIER, barriers);
+
+	for (Entity* barrier : barriers) {
+		Barrier* b = static_cast<Barrier*>(barrier);
+		Entity* ret = b->Find(targetName);
+
+		if (ret != nullptr) { return ret; }
+	}
+	return nullptr;
+}
+
+void Room::FindAllTakeable(list<Item*>& items) {
+	for (Entity* entity : contains) {
+		if (entity->GetType() == EntityType::ITEM) { 
+			items.push_back(static_cast<Item*>(entity)); 
+			continue;
+		}
+
+		if (entity->GetType() == EntityType::BARRIER) {
+			Barrier* b = static_cast<Barrier*>(entity);
+
+			if (!b->IsOpen()) { continue; }
+
+			for (Entity* i : b->contains) {
+				if (i->GetType() == EntityType::ITEM) {
+					items.push_back(static_cast<Item*>(i));
+					continue;
+				}
+			}			
 		}
 	}
 
-	return nullptr;
+	return;
 }
 
 void Room::Update() {

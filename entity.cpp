@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "entity.h"
 #include "globals.h"
 
@@ -61,9 +62,11 @@ void Entity::Look() const {
 
 void Entity::Update() { return; }
 
-Entity* Entity::Find(const string& targetName) const {
+Entity* Entity::Find(const string& targetName) {
 	for (Entity* entity : contains) {
-		if (entity->GetName() == targetName) {
+		string name = entity->GetName();
+		transform(name.begin(), name.end(), name.begin(), ::tolower);
+		if (name == targetName) {
 			return entity;
 		}
 	}

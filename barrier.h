@@ -12,6 +12,7 @@ public:
 	void Open();
 	void Unlock();
 	bool TryUnlock(Item* item);
+	Entity* Find(const std::string& targetName) override;
 
 	bool IsOpen() const;
 	bool IsLocked() const;	
