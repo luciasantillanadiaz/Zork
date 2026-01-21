@@ -16,6 +16,7 @@ public:
 	bool Open(Barrier* barrier) override;
 	bool Take(Item* item) override;
 	bool Drop(Item* item) override;
+	bool Place(Item* item, Barrier* place);
 	bool Attack(Creature* target, Item* weapon) override;
 	void Update() override;
 	void Die();
