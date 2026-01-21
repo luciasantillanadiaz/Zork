@@ -3,6 +3,7 @@
 #include "exit.h"
 #include "globals.h"
 #include "barrier.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -47,7 +48,9 @@ Exit* Room::GetExit(Direction direction) const {
 
 Entity* Room::Find(const string& targetName) const {
 	for (Entity* entity : contains) {
-		if (entity->GetName() == targetName) {
+		string name = entity->GetName();
+		transform(name.begin(), name.end(), name.begin(), ::tolower);
+		if (name == targetName) {
 			return entity;
 		}
 	}
@@ -56,7 +59,9 @@ Entity* Room::Find(const string& targetName) const {
 	FindAllOfType(EntityType::EXIT, exits);
 	for (Entity* exit : exits) {
 		for (Entity* c : exit->contains) {
-			if (c->GetName() == targetName) {
+			string name = c->GetName();
+			transform(name.begin(), name.end(), name.begin(), ::tolower);
+			if (name == targetName) {
 				return c;
 			}
 		}
