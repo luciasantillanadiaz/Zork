@@ -190,6 +190,105 @@ void Command::RegisterCommands(Player* player) {
         player->Unlock(static_cast<Barrier*>(entity), static_cast<Item*>(entityItem));
     };
     commands["unlock"] = unlock;
+
+    // --- ATTACK ---
+    auto attack = [this, player](const vector<string>& args) {
+        if (!player->inCombat) {
+            PushNotification("There is no one to attack here.");
+            return;
+        }
+
+        auto getWeapon = [&](const string& name) -> Item* {
+            Entity* entity = player->Find(name);
+
+            if (!entity) { 
+                PushNotification("You don't possess that."); 
+                return nullptr; }
+
+            if (entity->GetType() != EntityType::ITEM) { 
+                PushNotification(entity->GetName() + " is not an item."); 
+                return nullptr; 
+            }
+
+            Item* item = static_cast<Item*>(entity);
+            if (item->GetItemType() != ItemType::WEAPON) { 
+                PushNotification(item->GetName() + " is not a weapon."); 
+                return nullptr; 
+            }
+
+            return item;
+        };
+
+        auto getTarget = [&](const string& name) -> Enemy* {
+            if (name.empty()) {
+                list<Entity*> enemies;
+                player->GetRoom()->FindAllOfType(EntityType::ENEMY, enemies);
+                
+                if (enemies.empty()) { 
+                    PushNotification("There is no one to attack here."); 
+                    return nullptr; 
+                }
+
+                if (enemies.size() > 1) { 
+                    PushNotification("Choose one enemy to attack."); 
+                    return nullptr; 
+                }
+
+                return static_cast<Enemy*>(enemies.front());
+            }
+            else {
+                Entity* entity = player->GetRoom()->Find(name);
+                if (!entity || entity->GetType() != EntityType::ENEMY) {
+                    PushNotification("There is no such enemy in the room.");
+                    return nullptr;
+                }
+                return static_cast<Enemy*>(entity);
+            }
+        };
+
+        string targetName = "";
+        string weaponName = "";
+
+        // Parse Arguments
+        switch (args.size()) {
+        case 0: // attack
+            break;
+        case 1: // attack [enemy]
+            targetName = args[0];
+            break;
+        case 2: // attack with [weapon]
+            if (args[0] != "with") { 
+                PushNotification("Command not recognized."); 
+                return; 
+            }
+            weaponName = args[1];
+            break;
+        case 3: // attack [enemy] with [weapon]
+            if (args[1] != "with") { 
+                PushNotification("Command not recognized."); 
+                return; 
+            }
+            targetName = args[0];
+            weaponName = args[2];
+            break;
+        default:
+            PushNotification("Command not recognized.");
+            return;
+        }
+
+        Item* weapon = nullptr;
+        if (!weaponName.empty()) {
+            weapon = getWeapon(weaponName);
+            if (weapon == nullptr) { return; }
+        }
+
+        Enemy* target = getTarget(targetName);
+        if (target != nullptr) {
+            player->Attack(target, weapon);
+        }
+    };
+    commands["attack"] = attack;
+    commands["fight"] = attack;
 }
 
 void Command::ExecuteCommand(const string& command, const vector<string>& args) {
