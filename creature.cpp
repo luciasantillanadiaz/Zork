@@ -11,6 +11,9 @@ Creature::Creature(const string& name, const string& description, Room* room) :
 	Entity(name, description, static_cast<Entity*>(room))
 {
 	type = EntityType::CREATURE;
+	health = 10;
+	strength = 1;
+	inCombat = false;
 }
 
 Creature::~Creature() { }
@@ -103,4 +106,16 @@ Room* Creature::GetRoom() const {
 
 int Creature::GetHealth() const {
 	return health;
+}
+
+int Creature::GetStrength() const {
+	return strength;
+}
+
+void Creature::SetHealth(int hp) {
+	health = hp;
+}
+
+void Creature::SetStrength(int str) {
+	strength = str;
 }

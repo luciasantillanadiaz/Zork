@@ -22,7 +22,13 @@ public:
 
 	bool IsAlive() const;
 	int GetHealth() const;
+	int GetStrength() const;
 	Room* GetRoom() const;
+	void SetHealth(int hp);
+	void SetStrength(int str);
+
+public:
+	bool inCombat;
 
 private:
 	bool EnterRoom(Exit* exit);
