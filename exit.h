@@ -9,7 +9,7 @@ public:
 	Exit(Direction direction, Room* origin, Room* destination, bool bidirectional);
 	~Exit();
 
-	Room* GetDestinationFrom(Room* room) const;
+	Room* GetDestinationFrom(const Room* room) const;
 	Direction GetDirection(const Room* room) const;
 
 private:

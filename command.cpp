@@ -432,7 +432,7 @@ void Command::ExecuteCommand(const string& command, const vector<string>& args) 
 	}
 }
 
-Direction Command::GetDirectionFromString(const string& dir) {
+Direction Command::GetDirectionFromString(const string& dir) const {
     if (dir == "north" || dir == "n") return Direction::NORTH;
     if (dir == "south" || dir == "s") return Direction::SOUTH;
     if (dir == "east" || dir == "e") return Direction::EAST;

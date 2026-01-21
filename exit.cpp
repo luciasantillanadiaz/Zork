@@ -16,7 +16,7 @@ Exit::Exit(Direction direction, Room* origin, Room* destination, bool bidirectio
 
 Exit::~Exit() { }
 
-Room* Exit::GetDestinationFrom(Room* room) const {
+Room* Exit::GetDestinationFrom(const Room* room) const {
 	if (room == origin) {
 		return destination;
 	}

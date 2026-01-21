@@ -14,8 +14,8 @@ public:
 
 	ItemType GetItemType() const;
 	int GetDealingDamage() const;
-	void SetItemType(ItemType type);
-	void SetDealingDamage(int damage);
+	void SetItemType(const ItemType type);
+	void SetDealingDamage(const int damage);
 	void Look() const;
 
 private:

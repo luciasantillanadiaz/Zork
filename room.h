@@ -19,7 +19,7 @@ public:
 	void Update() override;
 	void SetCustomUpdate(std::function<void()> updateLogic);
 
-	Exit* GetExit(Direction direction) const;
+	Exit* GetExit(const Direction direction);
 
 private:
 	std::function<void()> customUpdate;

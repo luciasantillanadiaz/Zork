@@ -9,7 +9,7 @@ Item::Item(const string& name, const string& description, Entity* parent) :
 {
 	type = EntityType::ITEM;
 	itemType = ItemType::COMMON;
-	dealingDamage = 10;
+	dealingDamage = 0;
 }
 
 Item::~Item() { }
@@ -22,11 +22,11 @@ int Item::GetDealingDamage() const {
 	return dealingDamage;
 }
 
-void Item::SetItemType(ItemType type) {
+void Item::SetItemType(const ItemType type) {
 	itemType = type;
 }
 
-void Item::SetDealingDamage(int damage) {
+void Item::SetDealingDamage(const int damage) {
 	dealingDamage = damage;
 }
 

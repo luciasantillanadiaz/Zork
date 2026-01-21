@@ -16,7 +16,7 @@ public:
 
 	void RegisterCommands(Player* player);
 	void ExecuteCommand(const std::string& command, const std::vector<std::string>& args);
-	Direction GetDirectionFromString(const std::string& dir);
+	Direction GetDirectionFromString(const std::string& dir) const;
 
 private:
 	std::unordered_map<std::string, commandHandler> commands;

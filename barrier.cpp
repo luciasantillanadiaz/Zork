@@ -30,7 +30,7 @@ bool Barrier::IsLocked() const {
 	return isLocked;
 }
 
-bool Barrier::TryUnlock(Item* item) {
+bool Barrier::TryUnlock(const Item* item) {
 	if (item == nullptr) { return false; }
 	if (item != key) { return false; }
 
