@@ -10,10 +10,34 @@ Command::Command() { }
 Command::~Command() { }
 
 void Command::RegisterCommands(Player* player) {
-	auto look = [player](const vector<string>& args) {
-		player->GetRoom()->Look();
-	};
-	commands["look"] = look;
+    // --- LOOK ---
+    auto look = [player](const vector<string>& args) {
+        switch (args.size()) {
+        case 0: {
+            player->GetRoom()->Look();
+            break;
+        }
+        case 1: {
+            Entity* entity = player->GetRoom()->Find(args[0]);
+
+            if (entity == nullptr) {
+                entity = player->Find(args[0]);
+            }
+
+            if (entity == nullptr) {
+                PushNotification("There is nothing like that here.");
+            }
+            else {
+                entity->Look();
+            }
+            break;
+        }
+        default:
+            PushNotification("Command not recognized.");
+        }
+    };
+    commands["look"] = look;
+    commands["l"] = look;
 
     // --- WALK ---
     auto move = [this, player](const vector<string>& args) {
