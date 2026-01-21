@@ -279,15 +279,20 @@ World::~World() {
 }
 
 void World::Update() {
-	for (Entity* entity : entities) {
+	auto it = entities.begin();
+	while (it != entities.end()) {
+		Entity* entity = *it;
+
 		if (entity->GetType() == EntityType::ENEMY || entity->GetType() == EntityType::PLAYER) {
 			Creature* c = static_cast<Creature*>(entity);
 			if (!c->IsAlive()) {
-				entities.remove(c);
+				it = entities.erase(it);
 				continue;
 			}
 		}
+
 		entity->Update();
+		++it;
 
 		if (player->GetParent() == endRoom) {
 			PushNotification("THE END");
