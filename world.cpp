@@ -139,7 +139,7 @@ World::World() {
 		chapel
 	);
 
-	// ITEMS
+	// --- ITEMS ---
 	Item* cross = new Item(
 		"cross",
 		"A carved cross with strange symbols. When touched a wave of calmness spreads through your body, it felt warm.",
