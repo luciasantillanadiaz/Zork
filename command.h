@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <functional>
+#include "entity.h"
 
 class Player;
 
@@ -15,6 +16,7 @@ public:
 
 	void RegisterCommands(Player* player);
 	void ExecuteCommand(const std::string& command, const std::vector<std::string>& args);
+	Direction GetDirectionFromString(const std::string& dir);
 
 private:
 	std::unordered_map<std::string, commandHandler> commands;

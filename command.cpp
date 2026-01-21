@@ -2,6 +2,7 @@
 #include "command.h"
 #include "player.h"
 #include "room.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -14,29 +15,38 @@ void Command::RegisterCommands(Player* player) {
 	};
 	commands["look"] = look;
 
-	auto moveNorth = [player](const vector<string>& args) {
-		player->Move(Direction::NORTH);
-	};
-	commands["north"] = moveNorth;
-	commands["n"] = moveNorth;
+    // --- WALK ---
+    auto move = [this, player](const vector<string>& args) {
+        if (args.empty()) {
+            PushNotification("Walk where?");
+            return;
+        }
+        else {
+            player->Move(GetDirectionFromString(args[0]));
+        }
+    };
+    commands["walk"] = move;
+    commands["go"] = move;
+    commands["move"] = move;
 
-	auto moveSouth = [player](const vector<string>& args) {
-		player->Move(Direction::SOUTH);
-	};
-	commands["south"] = moveSouth;
-	commands["s"] = moveSouth;
+    // --- DIRECTIONS ---
+    auto moveNorth = [player](const vector<string>& args) { player->Move(Direction::NORTH); };
+    commands["north"] = moveNorth; commands["n"] = moveNorth;
 
-	auto moveEast = [player](const vector<string>& args) {
-		player->Move(Direction::EAST);
-	};
-	commands["east"] = moveEast;
-	commands["e"] = moveEast;
+    auto moveSouth = [player](const vector<string>& args) { player->Move(Direction::SOUTH); };
+    commands["south"] = moveSouth; commands["s"] = moveSouth;
 
-	auto moveWest = [player](const vector<string>& args) {
-		player->Move(Direction::WEST);
-	};
-	commands["west"] = moveWest;
-	commands["w"] = moveWest;
+    auto moveEast = [player](const vector<string>& args) { player->Move(Direction::EAST); };
+    commands["east"] = moveEast; commands["e"] = moveEast;
+
+    auto moveWest = [player](const vector<string>& args) { player->Move(Direction::WEST); };
+    commands["west"] = moveWest; commands["w"] = moveWest;
+
+    auto down = [player](const vector<string>& args) { player->Move(Direction::DOWN); };
+    commands["down"] = down; commands["d"] = down;
+
+    auto up = [player](const vector<string>& args) { player->Move(Direction::UP); };
+    commands["up"] = up; commands["u"] = up;
 }
 
 void Command::ExecuteCommand(const string& command, const vector<string>& args) {
@@ -48,5 +58,16 @@ void Command::ExecuteCommand(const string& command, const vector<string>& args) 
 	else {
 		cout << "Command not recognized.\n";
 	}
+}
+
+Direction Command::GetDirectionFromString(const string& dir) {
+    if (dir == "north" || dir == "n") return Direction::NORTH;
+    if (dir == "south" || dir == "s") return Direction::SOUTH;
+    if (dir == "east" || dir == "e") return Direction::EAST;
+    if (dir == "west" || dir == "w") return Direction::WEST;
+    if (dir == "up" || dir == "u") return Direction::UP;
+    if (dir == "down" || dir == "d") return Direction::DOWN;
+
+    return Direction::UNKNOWN;
 }
 
