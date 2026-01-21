@@ -4,6 +4,7 @@
 #include "exit.h"
 #include "item.h"
 #include "barrier.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -81,7 +82,21 @@ bool Creature::Drop(Item* item) {
 bool Creature::Attack(Creature* target, Item* weapon) { 
 	if (target == nullptr) { return false; }
 
-	if (target->GetRoom() != parent) { return false; }
+	if (target->GetRoom() != parent) { return false; }	
+
+	if (weapon != nullptr) {
+		if (weapon->GetItemType() != ItemType::WEAPON) { 
+			return false; 
+		}
+		target->ReceiveDamage(weapon->GetDealingDamage());
+		PushNotification(name + " has attacked.");
+		PushNotification(target->GetName() + " took " + to_string(weapon->GetDealingDamage()) + " damage.");
+	}
+	else {
+		target->ReceiveDamage(strength);
+		PushNotification(name + " has attacked.");
+		PushNotification(target->GetName() + " took " + to_string(strength) + " damage.");
+	}	
 
 	return true;
 }
@@ -95,7 +110,7 @@ void Creature::ReceiveDamage(int damage) {
 }
 
 void Creature::Die() {
-	cout << name << "has died.\n";
+	PushNotification(name + " has died.");
 }
 
 bool Creature::IsAlive() const {

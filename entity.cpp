@@ -1,5 +1,6 @@
 #include <iostream>
 #include "entity.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -55,8 +56,7 @@ void Entity::FindAllOfType(EntityType type, std::list<Entity*>& list) const {
 }
 
 void Entity::Look() const {
-	cout << BOLD << name << "\n" << RESET;
-	cout << description << "\n";
+	PushNotification(description);
 }
 
 void Entity::Update() { return; }

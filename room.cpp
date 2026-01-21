@@ -1,9 +1,9 @@
 #include <iostream>
+#include <algorithm>
 #include "room.h"
 #include "exit.h"
 #include "globals.h"
 #include "barrier.h"
-#include <algorithm>
 
 using namespace std;
 
